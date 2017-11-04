@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".activities.ReadSettingActivity">
+
+    <data>
+        <import type="com.ziank.novelreader.view_models.ReadSettingViewModel"/>
+        <import type="com.ziank.novelreader.views.slider.SlideMode"/>
+        <variable
+            name="setting"
+            type="ReadSettingViewModel"/>
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.Toolbar
+            android:id="@+id/toolbar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#0176da"
+            android:visibility="visible"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
+        </android.support.v7.widget.Toolbar>
+
+        <View
+            android:id="@+id/content_view"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            android:onClick="onClickView"
+            app:layout_constraintBottom_toTopOf="@id/read_tool_bar"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/toolbar"/>
+
+        <include
+            android:id="@+id/read_tool_bar"
+            layout="@layout/read_tool_bar"
+            android:layout_width="match_parent"
+            android:layout_height="64dp"
+            android:visibility="visible"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/content_view"/>
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/read_setting_bar"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:background="#F3F3F3"
+            android:elevation="5dp"
+            android:onClick="onClickView"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintRight_toRightOf="parent">
+
+            <ImageView
+                android:id="@+id/btn_zoom_down"
+                android:layout_width="99dp"
+                android:layout_height="68dp"
+                android:contentDescription="@string/zoom_down"
+                android:onClick="onClickView"
+                android:paddingBottom="10dp"
+                android:paddingEnd="30dp"
+                android:paddingStart="30dp"
+                android:paddingTop="15dp"
+                android:src="@{setting.isLeastSize ? @drawable/btn_zoom_down_disable : @drawable/btn_zoom_down}"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <TextView
+                android:id="@+id/tv_text_size"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                android:layout_marginEnd="15dp"
+                android:layout_marginStart="15dp"
+                android:gravity="center"
+                android:text="@{setting.textSizeString}"
+                android:textColor="@color/text_black"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="@id/btn_zoom_down"
+                app:layout_constraintLeft_toRightOf="@id/btn_zoom_down"
+                app:layout_constraintRight_toLeftOf="@id/btn_zoom_up"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <ImageView
+                android:id="@+id/btn_zoom_up"
+                android:layout_width="99dp"
+                android:layout_height="68dp"
+                android:contentDescription="@string/zoom_up"
+                android:onClick="onClickView"
+                android:paddingBottom="10dp"
+                android:paddingEnd="30dp"
+                android:paddingStart="30dp"
+                android:paddingTop="15dp"
+                android:src="@{setting.isMaximumSize ? @drawable/btn_zoom_up_disable : @drawable/btn_zoom_up}"
+                app:layout_constraintBottom_toBottomOf="@id/btn_zoom_down"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+            <View
+                android:id="@+id/separate_line"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_grey"
+                app:layout_constraintTop_toBottomOf="@id/btn_zoom_down"/>
+
+            <HorizontalScrollView
+                android:id="@+id/background_view"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/separate_line">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:orientation="horizontal">
+
+                    <com.ziank.novelreader.views.ReadBackgroundShowView
+                        android:id="@+id/read_bg_white"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="15dp"
+                        android:elevation="10dp"
+                        android:onClick="onClickView"
+                        android:scaleType="fitXY"
+                        app:select="@{setting.backgroundResouceIndex==0}"
+                        android:src="@color/white_color"/>
+
+                    <com.ziank.novelreader.views.ReadBackgroundShowView
+                        android:id="@+id/read_bg_image0"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="15dp"
+                        android:elevation="10dp"
+                        android:onClick="onClickView"
+                        android:scaleType="fitXY"
+                        app:select="@{setting.backgroundResouceIndex==1}"
+                        android:src="@drawable/read_bg_0"/>
+
+                    <com.ziank.novelreader.views.ReadBackgroundShowView
+                        android:id="@+id/read_bg_image1"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="15dp"
+                        android:elevation="10dp"
+                        android:onClick="onClickView"
+                        android:scaleType="fitXY"
+                        app:select="@{setting.backgroundResouceIndex==2}"
+                        android:src="@drawable/read_bg_1"/>
+
+                    <com.ziank.novelreader.views.ReadBackgroundShowView
+                        android:id="@+id/read_bg_image2"
+                        android:layout_width="80dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="15dp"
+                        android:elevation="10dp"
+                        android:onClick="onClickView"
+                        android:scaleType="fitXY"
+                        app:select="@{setting.backgroundResouceIndex==3}"
+                        android:src="@drawable/read_bg_2"/>
+
+                    <com.ziank.novelreader.views.ReadBackgroundShowView
+                        android:id="@+id/read_bg_image3"
+                        android:layout_width="105dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="15dp"
+                        android:elevation="10dp"
+                        android:onClick="onClickView"
+                        android:scaleType="fitXY"
+                        app:select="@{setting.backgroundResouceIndex==4}"
+                        android:src="@drawable/read_bg_3"/>
+
+                    <com.ziank.novelreader.views.ReadBackgroundShowView
+                        android:id="@+id/read_bg_image4"
+                        android:layout_width="100dp"
+                        android:layout_height="30dp"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginBottom="15dp"
+                        android:layout_marginEnd="15dp"
+                        android:layout_marginStart="15dp"
+                        android:layout_marginTop="15dp"
+                        android:elevation="10dp"
+                        android:onClick="onClickView"
+                        android:scaleType="fitXY"
+                        app:select="@{setting.backgroundResouceIndex==5}"
+                        android:src="@drawable/read_bg_4"/>
+                </LinearLayout>
+
+            </HorizontalScrollView>
+
+            <View
+                android:id="@+id/separate_line_2"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:background="@color/light_grey"
+                app:layout_constraintTop_toBottomOf="@id/background_view"/>
+
+            <LinearLayout
+                android:id="@+id/switch_mode_view"
+                android:layout_width="0dp"
+                android:layout_height="80dp"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/separate_line_2">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="15dp"
+                    android:gravity="center_vertical"
+                    android:text="@string/switch_page_mode"
+                    android:textColor="@color/text_black"
+                    android:textSize="20sp"/>
+
+                <TextView
+                    android:id="@+id/switch_mode_translation"
+                    android:layout_width="80dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:layout_marginStart="40dp"
+                    android:background="@{setting.slideMode==1 ? @color/colorPrimary : @color/light_grey}"
+                    android:gravity="center"
+                    android:onClick="onClickView"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/switch_mode_translation"
+                    android:textColor="@{setting.slideMode==1 ? @color/white_color : @color/dark_grey}"
+                    android:textSize="18sp"/>
+
+                <TextView
+                    android:id="@+id/switch_mode_simple"
+                    android:layout_width="80dp"
+                    android:layout_height="35dp"
+                    android:layout_gravity="center"
+                    android:background="@{setting.slideMode == 0 ? @color/colorPrimary : @color/light_grey}"
+                    android:gravity="center"
+                    android:onClick="onClickView"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/switch_mode_simple"
+                    android:textColor="@{setting.slideMode == 0 ? @color/white_color : @color/dark_grey}"
+                    android:textSize="18sp"/>
+
+            </LinearLayout>
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.constraint.ConstraintLayout>
+</layout>

@@ -1,0 +1,33 @@
+<resources>
+    <string name="app_name">小说阅读</string>
+    <string name="my_book_list">书架</string>
+    <string name="suggest_book_list">精选</string>
+    <string name="my_settings">设置</string>
+
+    <string name="blank_booklist">空空如也</string>
+    <string name="blank_tips">去搜索一下新书？</string>
+
+    <string name="refresh_success">刷新成功</string>
+    <string name="refresh_failed">刷新失败</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="search_book_hint">搜索想看的书...</string>
+    <string name="read">阅读</string>
+    <string name="add_to_booklist">加入书架</string>
+    <string name="already_in_booklist">已加入书架</string>
+    <string name="view_chapter_list">查看目录</string>
+    <string name="delete">删除</string>
+    <string name="view_book_page">查看书页</string>
+    <string name="download">下载</string>
+    <string name="update">更新</string>
+    <string name="catalog">目录</string>
+    <string name="setting">设置</string>
+    <string name="book_detail">详情</string>
+    <string name="zoom_down">缩小</string>
+    <string name="default_text_size">20</string>
+    <string name="zoom_up">放大</string>
+    <string name="switch_page_mode">翻页方式</string>
+    <string name="switch_mode_translation">平移</string>
+    <string name="switch_mode_simple">简约</string>
+</resources>

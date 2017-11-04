@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              android:elevation="10dp"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:orientation="horizontal"
+              android:background="#F4F4F4">
+
+    <com.ziank.novelreader.views.TabbarItemView
+        android:id="@+id/tabbar_booklist"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:drawableTop="@drawable/maintab_bookstand_icon_hover"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="0sp"
+        android:text="@string/my_book_list"
+        android:textColor="@color/main_tab_hover"
+        android:textSize="15sp"/>
+
+    <com.ziank.novelreader.views.TabbarItemView
+        android:id="@+id/tabbar_suggest"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="1"
+        android:drawableTop="@drawable/maintab_city_icon"
+        android:gravity="center_horizontal"
+        android:lineSpacingExtra="0sp"
+        android:text="@string/suggest_book_list"
+        android:textColor="@color/main_tab"
+        android:textSize="15sp"/>
+
+    <!--<com.ziank.novelreader.views.TabbarItemView-->
+        <!--android:id="@+id/tabbar_settings"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_gravity="center"-->
+        <!--android:layout_weight="1"-->
+        <!--android:drawableTop="@drawable/maintab_category_icon"-->
+        <!--android:gravity="center"-->
+        <!--android:lineSpacingExtra="0sp"-->
+        <!--android:text="@string/my_settings"-->
+        <!--android:textAlignment="center"-->
+        <!--android:textColor="@color/main_tab"-->
+        <!--android:textSize="15sp"/>-->
+
+</LinearLayout>

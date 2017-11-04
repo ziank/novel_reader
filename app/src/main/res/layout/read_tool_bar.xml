@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:elevation="5dp"
+    android:background="@color/white_color">
+
+    <TextView
+        android:id="@+id/catalog_btn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingTop="10dp"
+        android:drawablePadding="5dp"
+        android:paddingBottom="10dp"
+        android:layout_weight="1"
+        android:text="@string/catalog"
+        android:textSize="12sp"
+        android:gravity="center"
+        android:textColor="@color/text_black"
+        android:drawableTop="@drawable/menu_icon_catalog"/>
+
+    <TextView
+        android:id="@+id/setting_btn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:drawablePadding="5dp"
+        android:drawableTop="@drawable/menu_icon_setting"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/setting"
+        android:textColor="@color/text_black"
+        android:textSize="12sp"/>
+
+    <TextView
+        android:id="@+id/detail_btn"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        android:drawablePadding="5dp"
+        android:drawableTop="@drawable/menu_icon_detail"
+        android:gravity="center"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:text="@string/book_detail"
+        android:textColor="@color/text_black"
+        android:textSize="12sp"/>
+
+</LinearLayout>

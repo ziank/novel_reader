@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3399FF</color>
+    <color name="colorPrimaryDark">#30859F</color>
+    <color name="colorAccent">#FF4081</color>
+    <color name="main_tab_hover">#3399FF</color>
+    <color name="main_tab">#979797</color>
+    <color name="white_color">#FFFFFF</color>
+    <color name="text_black">#333333</color>
+    <color name="border_color">#ff878787</color>
+    <color name="light_grey">#BBBBBB</color>
+    <color name="dark_grey">#888888</color>
+    <color name="text_dark_grey">#666666</color>
+    <color name="selected_item">#99BB99</color>
+    <color name="red_color">#FF0000</color>
+    <color name="transparent">#00000000</color>
+</resources>
