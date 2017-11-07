@@ -19,7 +19,6 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        supportRequestWindowFeature(Window.FEATURE_NO_TITLE)
         EventBus.getDefault().register(this)
     }
 

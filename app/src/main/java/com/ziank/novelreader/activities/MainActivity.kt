@@ -27,8 +27,6 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         initTabbars()
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
-        toolbar.setNavigationIcon(R.mipmap.ic_launcher)//设置导航栏图标
-        toolbar.setTitle(R.string.app_name)//设置主标题
         setSupportActionBar(toolbar)
     }
 
@@ -77,11 +75,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
         for (i in 0 until TAB_BAR_ITEM_COUNT) {
             val itemView = mTabbarItems[i]
-            if (i == index) {
-                itemView!!.setSelected(true)
-            } else {
-                itemView!!.setSelected(false)
-            }
+            itemView!!.isSelected = i == index
         }
 
         val transaction = mFragManager!!.beginTransaction()
@@ -98,6 +92,15 @@ class MainActivity : BaseActivity(), View.OnClickListener {
             transaction.add(R.id.container, fragment, tag)
         }
         transaction.commitAllowingStateLoss()
+        supportActionBar?.title = getShowTitle(index)
+    }
+
+    private fun getShowTitle(index: Int): String? {
+        return when(index) {
+            BOOK_LIST_INDEX -> getString(R.string.my_book_list)
+            SUGGEST_INDEX -> getString(R.string.suggest_book_list)
+            else -> ""
+        }
     }
 
     private fun newFragment(index: Int): Fragment? {

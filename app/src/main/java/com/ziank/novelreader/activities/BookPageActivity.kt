@@ -48,7 +48,6 @@ class BookPageActivity : BaseActivity(), View.OnClickListener {
 
 
         val toolbar = binding.toolbar
-        toolbar.title = mBook.title//设置主标题
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }

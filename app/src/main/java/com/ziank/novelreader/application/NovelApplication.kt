@@ -4,8 +4,6 @@ import android.app.Application
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
 import com.ziank.novelreader.R
-
-import com.ziank.novelreader.database.DatabaseManager
 import com.ziank.novelreader.views.slider.SlideMode
 
 /**
@@ -26,13 +24,23 @@ class NovelApplication : Application() {
         get() = mPreference.getInt(kReadSize, 20)
         set(size) = mPreference.edit().putInt(kReadSize, size).apply()
 
-    var backgroundResource:Int
-        get() = mPreference.getInt(kReadBackgroundResource, R.color.white_color)
+    var backgroundResource: Int
+        get() {
+            val resourceIndex = mPreference.getInt(kReadBackgroundResource, 0)
+            return when (resourceIndex) {
+                1 -> R.drawable.read_bg_0
+                2 -> R.drawable.read_bg_1
+                3 -> R.drawable.read_bg_2
+                4 -> R.drawable.read_bg_3
+                5 -> R.drawable.read_bg_4
+                else -> R.color.white_color
+            }
+        }
         set(resource) = mPreference.edit().putInt(kReadBackgroundResource, resource).apply()
 
-    val readTextColor:Int
+    val readTextColor: Int
         get() {
-            return when(backgroundResource) {
+            return when (backgroundResource) {
                 R.drawable.read_bg_1 -> R.color.light_grey
                 else -> R.color.text_dark_grey
             }

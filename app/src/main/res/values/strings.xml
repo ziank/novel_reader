@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">小说阅读</string>
+    <string name="app_name">易小说</string>
     <string name="my_book_list">书架</string>
     <string name="suggest_book_list">精选</string>
     <string name="my_settings">设置</string>
@@ -10,8 +10,6 @@
     <string name="refresh_success">刷新成功</string>
     <string name="refresh_failed">刷新失败</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="search_book_hint">搜索想看的书...</string>
     <string name="read">阅读</string>
     <string name="add_to_booklist">加入书架</string>
@@ -30,4 +28,11 @@
     <string name="switch_page_mode">翻页方式</string>
     <string name="switch_mode_translation">平移</string>
     <string name="switch_mode_simple">简约</string>
+    <string name="search">搜索</string>
+    <string name="advise_week">推荐周排行</string>
+    <string name="advise_month">推荐月排行</string>
+    <string name="advise_all">推荐总排行</string>
+    <string name="rank_all">点击总排行</string>
+    <string name="rank_month">点击月排行</string>
+    <string name="rank_week">点击周排行</string>
 </resources>

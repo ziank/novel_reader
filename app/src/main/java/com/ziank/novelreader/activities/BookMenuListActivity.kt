@@ -18,6 +18,7 @@ import android.widget.TextView
 import com.ziank.novelreader.R
 import com.ziank.novelreader.config.Constants
 import com.ziank.novelreader.loaders.BookChapterListLoader
+import com.ziank.novelreader.manager.BookManager
 import com.ziank.novelreader.model.Book
 import com.ziank.novelreader.model.Chapter
 import com.ziank.novelreader.model.NovelEvent
@@ -56,14 +57,14 @@ class BookMenuListActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Array
             if (mActivityFrom == FROM_CONTENT) {
                 val intent = Intent()
                 intent.putExtra(Constants.CHAPTER_INDEX, pos)
-                intent.putExtra(Constants.LINE_INDEX, 0)
+                intent.putExtra(Constants.READ_POS, 0)
                 setResult(Constants.RESULT_SELECT_CHAPTER, intent)
                 finish()
             } else {
                 val intent = Intent(this@BookMenuListActivity,
                         ReadActivity::class.java)
                 mBook.chapterIndex = pos
-                mBook.lineIndex = 0
+                mBook.charIndex = 0
                 intent.putExtra(Constants.BOOK, mBook)
                 startActivity(intent)
             }
@@ -81,7 +82,6 @@ class BookMenuListActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Array
         }
 
         val toolbar = findViewById(R.id.toolbar) as Toolbar
-        toolbar.setTitle(R.string.view_chapter_list)//设置主标题
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
@@ -118,14 +118,18 @@ class BookMenuListActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Array
             return
         }
 
-        val chapterList = event.eventData as ArrayList<Chapter>?
-        if (null == chapterList || chapterList.isEmpty()) {
+        val book = event.eventData as Book
+        if (mBook.equalsToBook(book)) {
+            val chapters = BookManager.instance
+                    .readChapterListFromDisk(mBook)
+            if (null == chapters || chapters.isEmpty()) {
+                hideProgressHud()
+                return
+            }
+            mChapterList = chapters
+            mAdapter!!.notifyDataSetChanged()
             hideProgressHud()
-            return
         }
-        mChapterList = chapterList
-        mAdapter!!.notifyDataSetChanged()
-        hideProgressHud()
     }
 
     private inner class ChapterListAdapter(

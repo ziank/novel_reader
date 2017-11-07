@@ -25,4 +25,6 @@ class BookItemViewModule(private var mBook: Book) : BaseObservable() {
 
     val bookCoverUrl: String?
         get() = mBook.bookCoverUrl
+    val desc: String?
+        get() = mBook.summary
 }

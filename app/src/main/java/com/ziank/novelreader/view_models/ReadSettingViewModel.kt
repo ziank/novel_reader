@@ -41,4 +41,6 @@ class ReadSettingViewModel(novel: NovelApplication):BaseObservable() {
     val isLeastSize:Boolean
         @Bindable
         get() = textSize <= 12
+
+    var title: String = ""
 }

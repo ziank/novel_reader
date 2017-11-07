@@ -33,6 +33,8 @@
         <activity android:name=".activities.ReadSettingActivity"
                   android:theme="@style/Transparent">
         </activity>
+        <activity android:name=".activities.SearchBookActivity">
+        </activity>
     </application>
 
 </manifest>

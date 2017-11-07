@@ -1,7 +1,6 @@
 package com.ziank.novelreader.database
 
 import android.content.ContentValues
-import android.database.Cursor
 import android.util.Log
 
 import com.ziank.novelreader.application.NovelApplication
@@ -33,8 +32,8 @@ class DatabaseManager {
                 .summary)
         contentValues.put(DataBaseHelper.BookTable.CHAPTER_INDEX, book
                 .chapterIndex)
-        contentValues.put(DataBaseHelper.BookTable.LINE_INDEX, book
-                .lineIndex)
+        contentValues.put(DataBaseHelper.BookTable.READ_POS, book
+                .charIndex)
         contentValues.put(DataBaseHelper.BookTable.HAS_UPDATE, book
                 .isHasUpdate)
         contentValues.put(DataBaseHelper.BookTable.SORT_TIME,
@@ -62,8 +61,8 @@ class DatabaseManager {
         val contentValues = ContentValues()
         contentValues.put(DataBaseHelper.BookTable.CHAPTER_INDEX, book
                 .chapterIndex)
-        contentValues.put(DataBaseHelper.BookTable.LINE_INDEX, book
-                .lineIndex)
+        contentValues.put(DataBaseHelper.BookTable.READ_POS, book
+                .charIndex)
         contentValues.put(DataBaseHelper.BookTable.SORT_TIME,
                 System.currentTimeMillis())
         mDbHelper.writableDatabase.update(DataBaseHelper.BookTable

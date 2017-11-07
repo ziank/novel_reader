@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <import type="android.view.View"/>
+
+        <variable
+            name="book"
+            type="com.ziank.novelreader.view_models.BookItemViewModule"/>
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:paddingStart="15dp"
+        android:paddingEnd="15dp"
+        android:background="@color/white_color">
+
+        <ImageView
+            android:id="@+id/book_cover"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerVertical="true"
+            app:imageUrl="@{book.bookCoverUrl}"
+            app:srcCompat="@drawable/booklist" />
+
+        <LinearLayout
+            android:id="@+id/content_view"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingEnd="20dp"
+            android:orientation="vertical"
+            android:layout_toEndOf="@id/book_cover">
+
+            <TextView
+                android:id="@+id/book_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@{book.title}"
+                android:textColor="@color/text_black"
+                android:textStyle="bold"
+                android:textSize="20sp"/>
+
+            <TextView
+                android:id="@+id/book_summary"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:maxLines="2"
+                android:text="@{book.desc}"
+                android:textColor="@color/dark_grey"
+                android:textSize="15sp"/>
+
+            <TextView
+                android:id="@+id/book_author"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="@{book.author}"
+                android:textColor="@color/dark_grey"
+                android:textSize="15sp"/>
+
+        </LinearLayout>
+    </RelativeLayout>
+</layout>

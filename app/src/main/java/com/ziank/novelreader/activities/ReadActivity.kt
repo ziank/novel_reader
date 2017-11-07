@@ -31,6 +31,7 @@ class ReadActivity : BaseActivity() {
     private var mChapters: List<Chapter>? = null
     private var mChapterIndex = 0
     private var mCurrentLineIndex = 0
+    private var mCurrentCharIndex: Int = 0
 
     private lateinit var mSlidingLayout: SlidingLayout
 
@@ -49,7 +50,7 @@ class ReadActivity : BaseActivity() {
         get() {
             val dm = DisplayMetrics()
             windowManager.defaultDisplay.getMetrics(dm)
-            return mNovel.readTextSize * dm.scaledDensity
+            return mNovel.readTextSize.toFloat()
         }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -65,7 +66,7 @@ class ReadActivity : BaseActivity() {
         mHandler = Handler()
         mBook = intent.getSerializableExtra(Constants.BOOK) as Book
         mChapterIndex = mBook.chapterIndex
-        mCurrentLineIndex = mBook.lineIndex
+        mCurrentCharIndex = mBook.charIndex
 
         initViews()
         initData()
@@ -83,6 +84,10 @@ class ReadActivity : BaseActivity() {
             } else {
                 val intent = Intent(this@ReadActivity,
                         ReadSettingActivity::class.java)
+                mChapters?.let {
+                    intent.putExtra(Constants.TITLE,
+                            mChapters!![mChapterIndex].title)
+                }
                 intent.flags = Intent.FLAG_ACTIVITY_NO_ANIMATION
                 startActivityForResult(intent, Constants
                         .REQUEST_CODE_READ_SETTING)
@@ -162,6 +167,9 @@ class ReadActivity : BaseActivity() {
                 val slidingMode = event.eventData as Int
                 switchSlidingMode(slidingMode)
             }
+            NovelEvent.EventTypeChangeFontSize -> {
+                mSlidingAdapter.refreshTextSize()
+            }
         }
     }
 
@@ -224,6 +232,7 @@ class ReadActivity : BaseActivity() {
 
     private fun reloadData(chapterContent: String) {
         mSlidingAdapter.setCurrentChapterContent(chapterContent)
+        mCurrentLineIndex = mSlidingAdapter.getLineNumber(mCurrentCharIndex)
         mSlidingAdapter.notifyDataSetChanged()
     }
 
@@ -244,8 +253,9 @@ class ReadActivity : BaseActivity() {
                 }
                 mChapterIndex = data.getIntExtra(Constants.CHAPTER_INDEX,
                         mChapterIndex)
-                mCurrentLineIndex = data.getIntExtra(Constants
-                        .LINE_INDEX, mCurrentLineIndex)
+                mCurrentCharIndex = data.getIntExtra(Constants
+                        .READ_POS, mCurrentCharIndex)
+                mCurrentLineIndex = mSlidingAdapter.getLineNumber(mCurrentCharIndex)
             }
             Constants.REQUEST_CODE_READ_SETTING -> {
                 when (resultCode) {
@@ -285,35 +295,29 @@ class ReadActivity : BaseActivity() {
         private var mCurrentChapterContent: List<String>? = null
         private var mNextChapterContent: List<String>? = null
         private var mPreviousChapterContent: List<String>? = null
+        private var mCurrentContentString:String = ""
+        private lateinit var mReadView:ReadView
 
-        fun checkPaint() {
-            if (null == BookManager.instance.paint) {
-                val contentView = layoutInflater.inflate(R.layout
-                        .read_content, null)
-                val textView = contentView.findViewById<TextView>(R.id
-                        .text_content)
-                textView.textSize = readTextSizeFloat
-                BookManager.instance.paint = textView.paint
-            }
+        init {
+            val contentView = layoutInflater.inflate(R.layout
+                    .read_content, null)
+            mReadView = contentView.findViewById<TextView>(R.id
+                    .text_content) as ReadView
+            BookManager.instance.paint = mReadView.paint
         }
 
         fun setCurrentChapterContent(text: String) {
-            checkPaint()
+            mCurrentContentString = text
             this.mCurrentChapterContent = BookManager.instance
                     .splitTextWithTextSize(text, readContentWidth)
-            if (mLineNumber == 0) {
-                mLineNumber = DEFAULT_LINE_NUMBER
-            }
         }
 
         fun setNextChapterContent(text: String) {
-            checkPaint()
             this.mNextChapterContent = BookManager.instance
                     .splitTextWithTextSize(text, readContentWidth)
         }
 
         fun setPreviousChapterContent(text: String) {
-            checkPaint()
             this.mPreviousChapterContent = BookManager.instance
                     .splitTextWithTextSize(text, readContentWidth)
         }
@@ -330,9 +334,6 @@ class ReadActivity : BaseActivity() {
         }
 
         override fun getCurrent(): List<String> {
-            if (mLineNumber == 0) {
-                mLineNumber = DEFAULT_LINE_NUMBER
-            }
             if (mCurrentLineIndex >= mCurrentChapterContent!!.size) {
                 return mCurrentChapterContent!!
             }
@@ -348,14 +349,7 @@ class ReadActivity : BaseActivity() {
         override fun getNext(): List<String> {
             val readView = currentView.findViewById<View>(R.id.text_content) as ReadView
             val lineCount = readView.lineCount
-            if (mLineNumber == DEFAULT_LINE_NUMBER || 0 == mLineNumber) {
-                if (mCurrentLineIndex + lineCount < mCurrentChapterContent!!.size - 1) {
-                    mLineNumber = lineCount
-                }
-                if (mLineNumber == 0) {
-                    mLineNumber = DEFAULT_LINE_NUMBER
-                }
-            }
+
             val nextIndex = mCurrentLineIndex + lineCount
             if (nextIndex + mLineNumber < mCurrentChapterContent!!.size) {
                 return mCurrentChapterContent!!
@@ -378,15 +372,6 @@ class ReadActivity : BaseActivity() {
 
         override fun getPrevious(): List<String> {
             val readView = currentView.findViewById<View>(R.id.text_content) as ReadView
-            val lineCount = readView.lineCount
-            if (mLineNumber == DEFAULT_LINE_NUMBER || 0 == mLineNumber) {
-                if (mCurrentLineIndex + lineCount < mCurrentChapterContent!!.size - 1) {
-                    mLineNumber = lineCount
-                }
-                if (mLineNumber == 0) {
-                    mLineNumber = DEFAULT_LINE_NUMBER
-                }
-            }
 
             if (mCurrentLineIndex >= mCurrentChapterContent!!.size) {
                 return mCurrentChapterContent!!
@@ -432,9 +417,11 @@ class ReadActivity : BaseActivity() {
             val readView = currentView.findViewById<View>(R.id.text_content) as ReadView
             if (mCurrentLineIndex + readView.lineCount < mCurrentChapterContent!!
                     .size - 1) {
-                mCurrentLineIndex = mCurrentLineIndex + readView.lineCount
+                mCurrentLineIndex += readView.lineCount
+                mCurrentCharIndex += readView.charNum
             } else {
                 mCurrentLineIndex = 0
+                mCurrentCharIndex = 0
                 mChapterIndex++
 
                 reloadTitle()
@@ -465,7 +452,7 @@ class ReadActivity : BaseActivity() {
                 if (mChapterIndex > 0) {
                     val prevChapter = mChapters!![mChapterIndex - 1]
                     val text = BookManager.instance.getChapterContent(mBook, prevChapter)
-                    if (text == null || text.length == 0) {
+                    if (text == null || text.isEmpty()) {
                         BookManager.instance.downloadChapterContent(mBook, prevChapter)
                     } else {
                         setPreviousChapterContent(text)
@@ -475,8 +462,50 @@ class ReadActivity : BaseActivity() {
                 mCurrentLineIndex = mCurrentLineIndex - mLineNumber
             }
             mCurrentLineIndex = if (mCurrentLineIndex >= 0) mCurrentLineIndex else 0
+            mCurrentCharIndex = getReadCharIndex()
+        }
+
+        fun getLineNumber(charIndex: Int): Int {
+            when {
+                (charIndex == 0) -> return 0
+                (mCurrentContentString.isEmpty()) -> return 0
+                (charIndex > mCurrentContentString.length) -> return 0
+                else -> {
+                    var charCount = 0
+                    for ((index, line) in mCurrentChapterContent!!.withIndex()) {
+                        charCount += line.length
+                        if (charIndex <= charCount) {
+                            return index
+                        }
+                    }
+                    return 0
+                }
+            }
+        }
+
+        private fun getReadCharIndex(): Int {
+            if (mCurrentChapterContent == null) {
+                return 0
+            }
+            var charIndex = 0
+            for ((index, line) in mCurrentChapterContent!!.withIndex()) {
+                if (index < mCurrentLineIndex) {
+                    charIndex += line.length
+                } else {
+                    break
+                }
+            }
+            return charIndex
+        }
+
+        fun refreshTextSize() {
+            mReadView.textSize = mNovel.readTextSize.toFloat()
+            mLineNumber = DEFAULT_LINE_NUMBER
+            reloadData()
+            BookManager.instance.paint = mReadView.paint
         }
     }
+
 
     private fun reloadTitle() {
         mChapters?.let {
@@ -488,7 +517,7 @@ class ReadActivity : BaseActivity() {
     override fun onPause() {
         super.onPause()
         mBook.chapterIndex = mChapterIndex
-        mBook.lineIndex = mCurrentLineIndex
+        mBook.charIndex = mCurrentCharIndex
         BookManager.instance.updateReadPost(mBook)
     }
 
@@ -502,6 +531,11 @@ class ReadActivity : BaseActivity() {
 
         fun updateData(content: List<String>) {
             mTextView.text = StringUtil.join(content, "\n")
+            mTextView.textSize = mNovel.readTextSize.toFloat()
+            if (mLineNumber == DEFAULT_LINE_NUMBER && mTextView.height > 0) {
+                mLineNumber = (mTextView.height - mTextView.paddingTop -
+                        mTextView.paddingBottom) / mTextView.lineHeight
+            }
         }
 
         fun updateBackground(resourceId: Int) {

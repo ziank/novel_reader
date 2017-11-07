@@ -217,8 +217,10 @@ class BooklistFragment : BaseFragment(), LoaderManager.LoaderCallbacks<List<Book
     @Subscribe(threadMode = ThreadMode.MAIN)
     override fun onEvent(event: NovelEvent) {
         when (event.eventType) {
-            NovelEvent.EventTypeFavoriteChanged, NovelEvent.EventTypeLastUpdateChanged, NovelEvent.EventTypeFetchChapterList, NovelEvent.EventTypeRefreshBookList -> loadDataFromLocal()
-
+            NovelEvent.EventTypeFavoriteChanged,
+            NovelEvent.EventTypeLastUpdateChanged,
+            NovelEvent.EventTypeFetchChapterList,
+            NovelEvent.EventTypeRefreshBookList -> loadDataFromLocal()
             else -> {
             }
         }

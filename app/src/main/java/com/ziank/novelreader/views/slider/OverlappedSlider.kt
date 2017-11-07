@@ -36,7 +36,7 @@ class OverlappedSlider : BaseSlider() {
         get() = mSlidingLayout!!.adapter as SlidingAdapter<List<String>>
 
     val previousView: View?
-        get() = adapter.previousView
+        get() = adapter.updatedPreviousView
 
     val currentShowView: View
         get() = adapter.currentView
@@ -104,6 +104,11 @@ class OverlappedSlider : BaseSlider() {
                 if (mDirection != BaseSlider.Companion.MOVE_NO_RESULT) {
                     if (mDirection == BaseSlider.Companion.MOVE_TO_LEFT) {
                         mScrollerView = currentShowView
+                        val nextView = adapter.updatedNextView
+                        if (nextView!!.parent != null) {
+                            mSlidingLayout!!.removeView(nextView)
+                        }
+                        mSlidingLayout!!.addView(nextView, 0)
                     } else {
                         mScrollerView = previousView
                     }
@@ -193,6 +198,12 @@ class OverlappedSlider : BaseSlider() {
         if (!adapter.hasNext() || !mScroller!!.isFinished) {
             return
         }
+
+        val nextView = adapter.updatedNextView
+        if (nextView!!.parent != null) {
+            mSlidingLayout!!.removeView(nextView)
+        }
+        mSlidingLayout!!.addView(nextView, 0)
 
         mScrollerView = currentShowView
         mScroller!!.startScroll(0, 0, mScreenWidth, 0, 500)

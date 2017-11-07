@@ -1,12 +1,7 @@
 package com.ziank.novelreader.model
 
 import android.database.Cursor
-import android.databinding.BindingAdapter
-import android.view.View
-import android.widget.ImageView
 
-import com.squareup.picasso.Picasso
-import com.ziank.novelreader.R
 import com.ziank.novelreader.database.CursorHelper
 import com.ziank.novelreader.database.DataBaseHelper
 import com.ziank.novelreader.manager.BookManager
@@ -31,7 +26,7 @@ class Book : Serializable {
     var summary: String? = null
 
     var chapterIndex: Int = 0
-    var lineIndex: Int = 0
+    var charIndex: Int = 0
     var isHasUpdate: Boolean = false
 
     val bookId: Long
@@ -77,8 +72,8 @@ class Book : Serializable {
                     .BOOK_SUMMARY)
             book.chapterIndex = helper.getInt(DataBaseHelper.BookTable
                     .CHAPTER_INDEX)
-            book.lineIndex = helper.getInt(DataBaseHelper.BookTable
-                    .LINE_INDEX)
+            book.charIndex = helper.getInt(DataBaseHelper.BookTable
+                    .READ_POS)
             book.isHasUpdate = helper.getBoolean(DataBaseHelper.BookTable
                     .HAS_UPDATE)
             return book

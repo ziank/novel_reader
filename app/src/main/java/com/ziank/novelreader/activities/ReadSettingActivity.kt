@@ -37,12 +37,18 @@ class ReadSettingActivity: BaseActivity() {
                 .setContentView<ActivityReadSettingBinding>(this, R.layout
                         .activity_read_setting, MyComponent())
         mReadSettingModel = ReadSettingViewModel(mNovel)
+
+        val title = intent.getStringExtra(Constants.TITLE)
+        if (!title.isNullOrEmpty()) {
+            mReadSettingModel.title = title
+        }
+
+
         binding.setting = mReadSettingModel
 
         mToolbar = binding.toolbar
         setSupportActionBar(mToolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.title = ""
 
         mReadToolbar = binding.readToolBar!!
 
@@ -104,6 +110,10 @@ class ReadSettingActivity: BaseActivity() {
                     mReadSettingModel.notifyPropertyChanged(BR.textSizeString)
                     mReadSettingModel.notifyPropertyChanged(BR.leastSize)
                     mReadSettingModel.notifyPropertyChanged(BR.maximumSize)
+
+                    val event = NovelEvent(NovelEvent.EventTypeChangeFontSize,
+                            size)
+                    EventBus.getDefault().post(event)
                 }
             }
 
@@ -117,60 +127,64 @@ class ReadSettingActivity: BaseActivity() {
                     mReadSettingModel.notifyPropertyChanged(BR.textSizeString)
                     mReadSettingModel.notifyPropertyChanged(BR.leastSize)
                     mReadSettingModel.notifyPropertyChanged(BR.maximumSize)
+                    val event = NovelEvent(NovelEvent.EventTypeChangeFontSize,
+                            size)
+                    EventBus.getDefault().post(event)
                 }
             }
 
             R.id.read_bg_white -> {
                 val event = NovelEvent(NovelEvent.EventTypeChangeReadBg, R
                         .color.white_color)
-                mNovel.backgroundResource = R.color.white_color
-                EventBus.getDefault().post(event)
                 mReadSettingModel.backgroundResourceId = R.color.white_color
+                mNovel.backgroundResource = mReadSettingModel.backgroundResouceIndex
+
+                EventBus.getDefault().post(event)
                 mReadSettingModel.notifyPropertyChanged(BR.backgroundResouceIndex)
             }
 
             R.id.read_bg_image0 -> {
                 val event = NovelEvent(NovelEvent.EventTypeChangeReadBg, R
                         .drawable.read_bg_0)
-                mNovel.backgroundResource = R.drawable.read_bg_0
                 EventBus.getDefault().post(event)
                 mReadSettingModel.backgroundResourceId = R.drawable.read_bg_0
+                mNovel.backgroundResource = mReadSettingModel.backgroundResouceIndex
                 mReadSettingModel.notifyPropertyChanged(BR.backgroundResouceIndex)
             }
 
             R.id.read_bg_image1 -> {
                 val event = NovelEvent(NovelEvent.EventTypeChangeReadBg, R
                         .drawable.read_bg_1)
-                mNovel.backgroundResource = R.drawable.read_bg_1
                 EventBus.getDefault().post(event)
                 mReadSettingModel.backgroundResourceId = R.drawable.read_bg_1
+                mNovel.backgroundResource = mReadSettingModel.backgroundResouceIndex
                 mReadSettingModel.notifyPropertyChanged(BR.backgroundResouceIndex)
             }
 
             R.id.read_bg_image2 -> {
                 val event = NovelEvent(NovelEvent.EventTypeChangeReadBg, R
                         .drawable.read_bg_2)
-                mNovel.backgroundResource = R.drawable.read_bg_2
                 EventBus.getDefault().post(event)
                 mReadSettingModel.backgroundResourceId = R.drawable.read_bg_2
+                mNovel.backgroundResource = mReadSettingModel.backgroundResouceIndex
                 mReadSettingModel.notifyPropertyChanged(BR.backgroundResouceIndex)
             }
 
             R.id.read_bg_image3 -> {
                 val event = NovelEvent(NovelEvent.EventTypeChangeReadBg, R
                         .drawable.read_bg_3)
-                mNovel.backgroundResource = R.drawable.read_bg_3
                 EventBus.getDefault().post(event)
                 mReadSettingModel.backgroundResourceId = R.drawable.read_bg_3
+                mNovel.backgroundResource = mReadSettingModel.backgroundResouceIndex
                 mReadSettingModel.notifyPropertyChanged(BR.backgroundResouceIndex)
             }
 
             R.id.read_bg_image4 -> {
                 val event = NovelEvent(NovelEvent.EventTypeChangeReadBg, R
                         .drawable.read_bg_4)
-                mNovel.backgroundResource = R.drawable.read_bg_4
                 EventBus.getDefault().post(event)
                 mReadSettingModel.backgroundResourceId = R.drawable.read_bg_4
+                mNovel.backgroundResource = mReadSettingModel.backgroundResouceIndex
                 mReadSettingModel.notifyPropertyChanged(BR.backgroundResouceIndex)
             }
 

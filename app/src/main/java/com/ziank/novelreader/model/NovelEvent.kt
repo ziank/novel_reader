@@ -15,5 +15,7 @@ class NovelEvent(var eventType: Int,
         val EventTypeRefreshBookList = EventTypeFetchChapterContent + 1
         val EventTypeChangeReadBg: Int = EventTypeRefreshBookList + 1
         val EventTypeChangeSlideMode: Int = EventTypeChangeReadBg + 1
+        val EventTypeChangeFontSize: Int = EventTypeChangeSlideMode + 1
+        val EventTypeSuggestResult: Int = EventTypeChangeFontSize + 1
     }
 }

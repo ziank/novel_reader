@@ -1,11 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
       xmlns:app="http://schemas.android.com/apk/res-auto"
       xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.ziank.novelreader.activities.MainActivity">
-    <item android:id="@+id/search_view"
+      tools:context=".activities.SearchBookActivity">
+    <item android:id="@+id/search_book"
           android:orderInCategory="101"
           android:title="@string/search"
           android:icon="@drawable/action_bar_search_view_icon"
           app:showAsAction="always"
-        />
+          app:actionViewClass="android.widget.SearchView"/>
 </menu>

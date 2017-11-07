@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Loader
 import android.graphics.Paint
 import android.graphics.Typeface
+import android.os.Build
 import android.os.Bundle
 import android.text.TextPaint
 import android.util.Base64
@@ -15,7 +16,9 @@ import com.ziank.novelreader.loaders.BookChapterListLoader
 import com.ziank.novelreader.model.Book
 import com.ziank.novelreader.model.Chapter
 import com.ziank.novelreader.model.NovelEvent
+import com.ziank.novelreader.parsers.NovelParser
 import com.ziank.novelreader.parsers.NovelParserFactory
+import com.ziank.novelreader.parsers.QidianParser
 
 import org.greenrobot.eventbus.EventBus
 import org.json.JSONArray
@@ -38,8 +41,22 @@ import kotlin.experimental.and
  * Created by zhaixianqi on 2017/9/26.
  */
 
+enum class BookSuggestType {
+    SuggestTypeDefault,
+    SuggestTypeAdviseWeek,
+    SuggestTypeAdviseMonth,
+    SuggestTypeAdviseAll,
+    SuggestTypeRankWeek,
+    SuggestTypeRankMonth,
+    SuggestTypeRankAll,
+}
+class SuggestBookListResult(var suggestType:BookSuggestType,
+                            var bookList:List<Book>) {
+}
+
 class BookManager private constructor() {
-    var paint: TextPaint? = null
+    lateinit var paint: TextPaint
+    var mSuggestParser: QidianParser = QidianParser()
 
     val novelPath: String
         get() {
@@ -103,12 +120,6 @@ class BookManager private constructor() {
                         override fun success(response: String) {
                             val result = NovelParserFactory.instance
                                     .getParser(url)!!.parseBookList(response)
-                            //                            result.removeIf(new Predicate<Book>() {
-                            //                                @Override
-                            //                                public boolean test(Book book) {
-                            //                                    return !book.getTitle().contains(bookname);
-                            //                                }
-                            //                            });
                             val event = NovelEvent(NovelEvent
                                     .EventTypeSearchResult, result)
                             EventBus.getDefault().post(event)
@@ -124,9 +135,6 @@ class BookManager private constructor() {
     }
 
     fun splitTextWithTextSize(text: String, width: Float): List<String> {
-        if (paint == null) {
-            return ArrayList()
-        }
         val resultLines = ArrayList<String>()
         val lines = text.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val count = lines.size
@@ -136,11 +144,11 @@ class BookManager private constructor() {
             val endPos = line.length
             val widths = floatArrayOf(0f, 0f)
             do {
-                val breakPos = paint!!.breakText(line, startPos, endPos,
+                val breakPos = paint.breakText(line, startPos, endPos,
                         true, width, widths)
                 resultLines.add(line.substring(startPos, startPos + breakPos))
                 if (startPos + breakPos < endPos) {
-                    startPos = startPos + breakPos
+                    startPos += breakPos
                 } else {
                     break
                 }
@@ -404,5 +412,54 @@ class BookManager private constructor() {
     companion object {
         private val DOWNLOAD_BOOK = Integer.MAX_VALUE
         val instance = BookManager()
+    }
+
+    fun fetchSuggestBookList(suggestType: BookSuggestType) {
+        val urlString = mSuggestParser.getSuggestUrl(suggestType)
+        NetworkManager.sharedManager.getHttpRequest(urlString, object:
+                NetworkCallback<String> {
+            override fun success(response: String) {
+                val result = mSuggestParser.parseBookList(response, urlString)
+                val suggestResult = SuggestBookListResult(suggestType, result)
+                val event = NovelEvent(NovelEvent.EventTypeSuggestResult, suggestResult)
+                EventBus.getDefault().post(event)
+            }
+
+            override fun fail(errorMessage: String?) {
+                val suggestResult = SuggestBookListResult(BookSuggestType
+                        .SuggestTypeDefault, ArrayList<Book>())
+                val event = NovelEvent(NovelEvent.EventTypeSuggestResult, suggestResult)
+                EventBus.getDefault().post(event)
+            }
+
+        })
+    }
+
+    fun fetchDefaultSuggestBook() {
+        fetchSuggestBookList(BookSuggestType.SuggestTypeDefault)
+    }
+
+    fun fetchRankWeekBookList() {
+        fetchSuggestBookList(BookSuggestType.SuggestTypeRankWeek)
+    }
+
+    fun fetchRankMonthBookList() {
+        fetchSuggestBookList(BookSuggestType.SuggestTypeRankMonth)
+    }
+
+    fun fetchRankAllBookList() {
+        fetchSuggestBookList(BookSuggestType.SuggestTypeRankAll)
+    }
+
+    fun fetchAdviseWeekBookList() {
+        fetchSuggestBookList(BookSuggestType.SuggestTypeAdviseWeek)
+    }
+
+    fun fetchAdviseMonthBookList() {
+        fetchSuggestBookList(BookSuggestType.SuggestTypeAdviseMonth)
+    }
+
+    fun fetchAdviseAllBookList() {
+        fetchSuggestBookList(BookSuggestType.SuggestTypeAdviseAll)
     }
 }

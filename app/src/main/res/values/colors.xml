@@ -14,4 +14,6 @@
     <color name="selected_item">#99BB99</color>
     <color name="red_color">#FF0000</color>
     <color name="transparent">#00000000</color>
+    <color name="search_transparent">#33000000</color>
+    <color name="listview_bgcolor">#F4F4F4</color>
 </resources>

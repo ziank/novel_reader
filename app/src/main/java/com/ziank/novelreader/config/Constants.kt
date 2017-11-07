@@ -9,7 +9,9 @@ object Constants {
 
     val CHAPTER_LIST = "chapter_list"
     val CHAPTER_INDEX = "chapter_index"
-    val LINE_INDEX = "line_index"
+    val READ_POS = "read_pos"
+    val TITLE = "title"
+    val BOOK_NAME = "book_name"
 
     val ACTIVITY_FROM = "activity_from"
 

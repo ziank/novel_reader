@@ -21,7 +21,7 @@ abstract class SlidingAdapter<T> {
                 mViews[mCurrentViewIndex] = curView
             } else {
                 val updateView = getView(curView, getCurrent())
-                if (curView !== updateView) {
+                if (curView != updateView) {
                     curView = updateView
                     mViews[mCurrentViewIndex] = updateView
                 }
@@ -49,7 +49,7 @@ abstract class SlidingAdapter<T> {
                 setView(mCurrentViewIndex + 1, nextView)
             } else if (hasNext) {
                 val updatedView = getView(nextView, getNext())
-                if (updatedView !== nextView) {
+                if (updatedView != nextView) {
                     nextView = updatedView
                     setView(mCurrentViewIndex + 1, nextView)
                 }
@@ -77,7 +77,7 @@ abstract class SlidingAdapter<T> {
                 setView(mCurrentViewIndex - 1, prevView)
             } else if (hasprev) {
                 val updatedView = getView(prevView, getPrevious())
-                if (updatedView !== prevView) {
+                if (updatedView != prevView) {
                     prevView = updatedView
                     setView(mCurrentViewIndex - 1, prevView)
                 }

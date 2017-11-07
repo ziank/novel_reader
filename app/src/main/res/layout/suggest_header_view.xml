@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+    <data>
+        <variable name="bindindex" type="Integer" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/advise_week"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentStart="true"
+            android:layout_marginStart="15dp"
+            android:layout_marginTop="30dp"
+            android:background="@{bindindex==0? @drawable/border_selected : @drawable/border}"
+            android:gravity="center"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:text="@string/advise_week"
+            android:textSize="17sp"/>
+
+        <TextView
+            android:id="@+id/advise_month"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="30dp"
+            android:background="@{bindindex==1? @drawable/border_selected : @drawable/border}"
+            android:gravity="center"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:text="@string/advise_month"
+            android:textSize="17sp"/>
+
+        <TextView
+            android:id="@+id/advise_all"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:layout_marginTop="30dp"
+            android:background="@{bindindex==2? @drawable/border_selected : @drawable/border}"
+            android:gravity="center"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:text="@string/advise_all"
+            android:textSize="17sp"/>
+
+        <TextView
+            android:id="@+id/rank_week"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignStart="@id/advise_week"
+            android:layout_below="@id/advise_week"
+            android:layout_marginBottom="30dp"
+            android:layout_marginTop="20dp"
+            android:background="@{bindindex==3? @drawable/border_selected : @drawable/border}"
+            android:gravity="center"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:text="@string/rank_week"
+            android:textSize="17sp"/>
+
+        <TextView
+            android:id="@+id/rank_month"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignTop="@id/rank_week"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="30dp"
+            android:background="@{bindindex==4? @drawable/border_selected : @drawable/border}"
+            android:gravity="center"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:text="@string/rank_month"
+            android:textSize="17sp"/>
+
+        <TextView
+            android:id="@+id/rank_all"
+            android:layout_width="wrap_content"
+            android:layout_height="30dp"
+            android:layout_alignParentEnd="true"
+            android:layout_alignTop="@id/rank_week"
+            android:layout_marginBottom="30dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="20dp"
+            android:background="@{bindindex==5? @drawable/border_selected : @drawable/border}"
+            android:gravity="center"
+            android:paddingEnd="8dp"
+            android:paddingStart="8dp"
+            android:text="@string/rank_all"
+            android:textSize="17sp"/>
+    </RelativeLayout>
+</layout>

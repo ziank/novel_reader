@@ -10,6 +10,7 @@
     <android.support.v7.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
+        app:title="@string/my_book_list"
         android:layout_height="wrap_content"
         app:theme="@style/AppTheme.ToolbarStyle"
         app:layout_constraintLeft_toLeftOf="parent"
