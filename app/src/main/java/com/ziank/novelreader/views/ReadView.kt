@@ -21,6 +21,11 @@ class ReadView : android.support.v7.widget.AppCompatTextView {
             return layout.getLineEnd(lineNum)
         }
 
+    val charCount:Int
+        get() {
+            return charNum - lineNum
+        }
+
     /**
      * 获取当前页总行数
      */

@@ -296,7 +296,7 @@ class BookManager private constructor() {
             file.mkdir()
         }
 
-        file = File(file, String.format("%d.txt", chapter.id))
+        file = File(file, String.format("%s.txt", getMd5(chapter.url!!)))
         val outputStream: FileOutputStream
         try {
             val fOut = FileOutputStream(file)
@@ -313,8 +313,8 @@ class BookManager private constructor() {
 
     private fun readContentFromDisk(book: Book,
                                     chapter: Chapter): String? {
-        val file = File(novelPath, String.format("%s/%d.txt", book
-                .bookCode, chapter.id))
+        val file = File(novelPath, String.format("%s/%s.txt", book
+                .bookCode, getMd5(chapter.url!!)))
         //Read text from file
         val text = StringBuilder()
 

@@ -76,6 +76,8 @@ class Book : Serializable {
                     .READ_POS)
             book.isHasUpdate = helper.getBoolean(DataBaseHelper.BookTable
                     .HAS_UPDATE)
+            book.bookUrl = book.bookUrl//.replace("qududu.org", "qududu.net")
+            book.bookCoverUrl = book.bookCoverUrl//.replace("qududu.org","qududu.net")
             return book
         }
     }

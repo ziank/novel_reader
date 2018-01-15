@@ -143,10 +143,11 @@ class ReadActivity : BaseActivity() {
                 val content = BookManager.instance
                         .getChapterContent(mBook, chapter)
                 content?.let {
-                    if (chapter.id == mChapters!![mChapterIndex].id) {
+                    if (chapter.url == mChapters!![mChapterIndex].url) {
                         mSlidingAdapter.setCurrentChapterContent(content)
                         hideProgressHud()
-                    } else if (mChapterIndex > 0 && chapter.id == mChapters!![mChapterIndex - 1].id) {
+                    } else if (mChapterIndex > 0 && chapter.url ==
+                            mChapters!![mChapterIndex - 1].url) {
                         mSlidingAdapter.setPreviousChapterContent(content)
                     } else if (mChapterIndex < mChapters!!.size - 1 && chapter
                             .id == mChapters!![mChapterIndex + 1].id) {
@@ -303,6 +304,7 @@ class ReadActivity : BaseActivity() {
                     .read_content, null)
             mReadView = contentView.findViewById<TextView>(R.id
                     .text_content) as ReadView
+            mReadView.textSize = mNovel.readTextSize.toFloat()
             BookManager.instance.paint = mReadView.paint
         }
 
@@ -418,7 +420,7 @@ class ReadActivity : BaseActivity() {
             if (mCurrentLineIndex + readView.lineCount < mCurrentChapterContent!!
                     .size - 1) {
                 mCurrentLineIndex += readView.lineCount
-                mCurrentCharIndex += readView.charNum
+                mCurrentCharIndex += readView.charCount
             } else {
                 mCurrentLineIndex = 0
                 mCurrentCharIndex = 0
@@ -459,7 +461,7 @@ class ReadActivity : BaseActivity() {
                     }
                 }
             } else {
-                mCurrentLineIndex = mCurrentLineIndex - mLineNumber
+                mCurrentLineIndex -= mLineNumber
             }
             mCurrentLineIndex = if (mCurrentLineIndex >= 0) mCurrentLineIndex else 0
             mCurrentCharIndex = getReadCharIndex()

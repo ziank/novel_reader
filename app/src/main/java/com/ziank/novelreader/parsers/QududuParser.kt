@@ -19,10 +19,11 @@ import java.util.ArrayList
 class QududuParser : BaseParser() {
 
     override val hostIdentifier: String
-        get() = ".qududu.net"
+        get() = ".qududu."
 
     override fun getSearchBookUrl(bookName: String): String {
-        return String.format("http://so.qududu.net/cse/search?" + "s=16241737094596512688&q=%s", bookName)
+        return String.format("http://so.qududu.org/cse/search?" +
+                "s=5058594308470912435&q=%s", bookName)
     }
 
     override fun getDownloadBookUrl(book: Book): String {
@@ -49,7 +50,8 @@ class QududuParser : BaseParser() {
             val title = getTagText(titleTag)
             var bookUrl = ""
             if (null != titleTag) {
-                bookUrl = titleTag.attr("href")
+                bookUrl = titleTag.attr("href")//.replace("qududu.org",
+                        //"qududu.net")
             }
 
             val summaryTag = element.select("p.result-game-item-desc")
@@ -69,7 +71,8 @@ class QududuParser : BaseParser() {
 
             val book = Book(title, author, bookUrl, updateContent)
             book.summary = summary
-            book.bookCoverUrl = coverUrl
+            book.bookCoverUrl = coverUrl//.replace("qududu.org",
+                    //"qududu.net")
             books.add(book)
         }
         return books
