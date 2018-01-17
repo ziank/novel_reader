@@ -3,8 +3,9 @@ package com.ziank.novelreader.parsers
 import org.jsoup.nodes.Element
 
 /**
- * Created by zhaixianqi on 2017/10/10.
- */
+* Created by ziank on 2017/10/10.
+* @copyright ziank.2018
+*/
 
 abstract class BaseParser : NovelParser {
     protected fun getTagText(tag: Element?): String {

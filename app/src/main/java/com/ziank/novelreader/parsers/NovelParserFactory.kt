@@ -5,8 +5,9 @@ import com.ziank.novelreader.model.Book
 import java.util.ArrayList
 
 /**
- * Created by zhaixianqi on 2017/10/18.
- */
+* Created by ziank on 2017/10/18.
+* @copyright ziank.2018
+*/
 
 class NovelParserFactory private constructor() {
     private val mParserList: MutableList<NovelParser>
@@ -45,16 +46,9 @@ class NovelParserFactory private constructor() {
         return null
     }
 
-    fun getSearchBookUrlList(bookName: String): List<String> {
-        val urlList = ArrayList<String>()
-        for (parser in mParserList) {
-            val searchUrl = parser.getSearchBookUrl(bookName)
-            if (null != searchUrl && searchUrl.length > 0) {
-                urlList.add(searchUrl)
-            }
-        }
-        return urlList
-    }
+    fun getSearchBookUrlList(bookName: String): List<String> = mParserList
+            .map { it.getSearchBookUrl(bookName) }
+            .filter { it.isNotEmpty() }
 
     companion object {
         private var sParserFactory: NovelParserFactory? = null

@@ -1,12 +1,12 @@
 package com.ziank.novelreader.views.slider
 
 import android.os.Bundle
-import android.os.Parcelable
 import android.view.View
 
 /**
- * Created by zhaixianqi on 2017/9/27.
- */
+* Created by ziank on 2017/9/27.
+* @copyright ziank.2018
+*/
 
 abstract class SlidingAdapter<T> {
     private var mViews: Array<View?> = arrayOfNulls(3)
@@ -130,7 +130,7 @@ abstract class SlidingAdapter<T> {
     }
 
 
-    abstract open fun getView(contentView: View?, t: T): View
+    abstract fun getView(contentView: View?, content: T): View
 
     abstract operator fun hasNext(): Boolean
 
@@ -140,11 +140,9 @@ abstract class SlidingAdapter<T> {
 
     protected abstract fun computePrevious()
 
-    fun saveState(): Bundle? {
-        return null
-    }
+    fun saveState(): Bundle? = null
 
-    fun restoreState(parcelable: Parcelable, classLoader: ClassLoader) {
+    fun restoreState() {
         mCurrentViewIndex = 0
         mViews[0] = null
         mViews[1] = null

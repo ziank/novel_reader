@@ -9,7 +9,8 @@ import com.ziank.novelreader.model.Book;
 import java.util.List;
 
 /**
- * Created by zhaixianqi on 2017/10/23.
+ * Created by ziank on 2017/10/23.
+ * @copyright ziank.2018
  */
 
 public class FavoriatedBookListLoader extends AsyncTaskLoader<List<Book>> {

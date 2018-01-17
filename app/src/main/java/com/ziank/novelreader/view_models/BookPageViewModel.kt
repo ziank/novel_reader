@@ -11,8 +11,9 @@ import com.ziank.novelreader.manager.BookManager
 import com.ziank.novelreader.model.Book
 
 /**
- * Created by zhaixianqi on 2017/10/23.
- */
+* Created by ziank on 2017/10/23.
+* @copyright ziank.2018
+*/
 
 class BookPageViewModel(private val mBook: Book) : BaseObservable() {
 

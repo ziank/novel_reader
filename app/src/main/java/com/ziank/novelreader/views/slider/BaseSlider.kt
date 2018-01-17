@@ -1,8 +1,9 @@
 package com.ziank.novelreader.views.slider
 
 /**
- * Created by zhaixianqi on 2017/9/27.
- */
+* Created by ziank on 2017/9/27.
+* @copyright ziank.2018
+*/
 
 abstract class BaseSlider : Slider {
     companion object {

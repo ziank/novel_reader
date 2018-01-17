@@ -3,8 +3,9 @@ package com.ziank.novelreader.views.slider
 import android.view.MotionEvent
 
 /**
- * Created by zhaixianqi on 2017/9/27.
- */
+* Created by ziank on 2017/9/27.
+* @copyright ziank.2018
+*/
 
 interface Slider {
     fun init(slidingLayout: SlidingLayout)

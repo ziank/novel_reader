@@ -151,7 +151,8 @@ class BookMenuListActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Array
         override fun getView(i: Int, view: View?, viewGroup: ViewGroup): View {
             var result = view
             if (result == null) {
-                result = mInflater.inflate(R.layout.menu_list_item, null)
+                result = mInflater.inflate(R.layout.menu_list_item,
+                        viewGroup, false)
             }
             val textView = result as TextView?
             textView!!.text = getItem(i)!!.title

@@ -6,8 +6,9 @@ import com.ziank.novelreader.model.Chapter
 import java.util.ArrayList
 
 /**
- * Created by zhaixianqi on 2017/10/9.
- */
+* Created by ziank on 2017/10/9.
+* @copyright ziank.2018
+*/
 
 interface NovelParser {
     val hostIdentifier: String

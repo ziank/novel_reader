@@ -4,28 +4,28 @@ import com.ziank.novelreader.manager.BookSuggestType
 import com.ziank.novelreader.model.Book
 import com.ziank.novelreader.model.Chapter
 import org.jsoup.Jsoup
+import org.jsoup.nodes.Element
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.ArrayList
 
 /**
- * Created by zhaixianqi on 2017/11/6.
- */
+* Created by ziank on 2017/11/6.
+* @copyright ziank.2018
+*/
 class QidianParser {
-    fun getSuggestUrl(suggestType: BookSuggestType):String {
-        return when (suggestType) {
-            BookSuggestType.SuggestTypeDefault -> "https://www.qidian.com/rank/collect?style=1"
-            BookSuggestType.SuggestTypeRankWeek -> "https://www.qidian.com/rank/click?style=1&dateType=1"
-            BookSuggestType.SuggestTypeRankMonth -> "https://www.qidian.com/rank/click?style=1&dateType=2"
-            BookSuggestType.SuggestTypeRankAll -> "https://www.qidian.com/rank/click?style=1&dateType=3"
-            BookSuggestType.SuggestTypeAdviseWeek -> "https://www.qidian.com/rank/recom?style=1&dateType=1"
-            BookSuggestType.SuggestTypeAdviseMonth -> "https://www.qidian" +
-                    ".com/rank/recom?style=1&dateType=2"
-            BookSuggestType.SuggestTypeAdviseAll -> "https://www.qidian" +
-                    ".com/rank/recom?style=1&dateType=3"
-            else -> "https://www.qidian.com/rank/collect?style=1"
-        }
-    }
+    fun getSuggestUrl(suggestType: BookSuggestType):String =
+            when (suggestType) {
+                BookSuggestType.SuggestTypeDefault -> "https://www.qidian.com/rank/collect?style=1"
+                BookSuggestType.SuggestTypeRankWeek -> "https://www.qidian.com/rank/click?style=1&dateType=1"
+                BookSuggestType.SuggestTypeRankMonth -> "https://www.qidian.com/rank/click?style=1&dateType=2"
+                BookSuggestType.SuggestTypeRankAll -> "https://www.qidian.com/rank/click?style=1&dateType=3"
+                BookSuggestType.SuggestTypeAdviseWeek -> "https://www.qidian.com/rank/recom?style=1&dateType=1"
+                BookSuggestType.SuggestTypeAdviseMonth -> "https://www.qidian" +
+                        ".com/rank/recom?style=1&dateType=2"
+                BookSuggestType.SuggestTypeAdviseAll -> "https://www.qidian" +
+                        ".com/rank/recom?style=1&dateType=3"
+            }
 
     fun parseBookList(htmlContent:String, baseUrlStr: String) :
             ArrayList<Book> {
@@ -41,7 +41,7 @@ class QidianParser {
 
         for (element in bookTags) {
             val coverTag = element.getElementsByTag("img").first()
-            var coverUrl: String = ""
+            var coverUrl = ""
             if (null != coverTag) {
                 coverUrl = coverTag.attr("data-src")
                 if (null == coverUrl || coverUrl.isEmpty()) {
@@ -70,7 +70,7 @@ class QidianParser {
             val summaryTag = element.select("p.intro").first()
             val summary = summaryTag.text()
 
-            var author = ""
+            var author: String
             try {
                 val authorTag = element.select("p.author").first()
                 val nameTag = authorTag.select("a.name").first()

@@ -9,9 +9,9 @@ import java.net.URL
 import java.util.ArrayList
 
 /**
- * Created by zhaixianqi on 2018/1/16.
- * @copyright NetEase.2017
- */
+* Created by ziank on 2018/1/16.
+* @copyright ziank.2018
+*/
 class SanjianggeParser: BaseParser() {
 
     override val resourceId: Int

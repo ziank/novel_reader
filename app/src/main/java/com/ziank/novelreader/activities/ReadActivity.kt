@@ -5,6 +5,7 @@ import android.content.Intent
 import android.content.Loader
 import android.os.Handler
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
@@ -61,7 +62,7 @@ class ReadActivity : BaseActivity() {
         mTitleView = findViewById(R.id.chapter_title) as TextView
 
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+                WindowManager.LayoutParams.FLAG_FULLSCREEN)
 
         mHandler = Handler()
         mBook = intent.getSerializableExtra(Constants.BOOK) as Book
@@ -297,11 +298,12 @@ class ReadActivity : BaseActivity() {
         private var mNextChapterContent: List<String>? = null
         private var mPreviousChapterContent: List<String>? = null
         private var mCurrentContentString:String = ""
-        private lateinit var mReadView:ReadView
+        private var mReadView:ReadView
 
         init {
+            val nullParent = null
             val contentView = layoutInflater.inflate(R.layout
-                    .read_content, null)
+                    .read_content, nullParent)
             mReadView = contentView.findViewById<TextView>(R.id
                     .text_content) as ReadView
             mReadView.textSize = mNovel.readTextSize.toFloat()
@@ -325,14 +327,16 @@ class ReadActivity : BaseActivity() {
         }
 
         override fun getView(contentView: View?, content: List<String>): View {
-            var contentView = contentView
-            if (contentView == null) {
-                contentView = layoutInflater.inflate(R.layout.read_content, null)
-                contentView!!.tag = Holder(contentView)
+            var currentViewView = contentView
+            if (currentViewView == null) {
+                val nullParent = null
+                currentViewView = layoutInflater.inflate(R.layout
+                        .read_content, nullParent)
+                currentViewView!!.tag = Holder(currentViewView)
             }
-            val holder = contentView.tag as Holder
+            val holder = currentViewView.tag as Holder
             holder.updateData(content)
-            return contentView
+            return currentViewView
         }
 
         override fun getCurrent(): List<String> {
@@ -373,8 +377,6 @@ class ReadActivity : BaseActivity() {
         }
 
         override fun getPrevious(): List<String> {
-            val readView = currentView.findViewById<View>(R.id.text_content) as ReadView
-
             if (mCurrentLineIndex >= mCurrentChapterContent!!.size) {
                 return mCurrentChapterContent!!
             }
@@ -527,8 +529,8 @@ class ReadActivity : BaseActivity() {
         private val mTextView: TextView = contentView.findViewById(R.id.text_content)
         init {
             updateBackground(mNovel.backgroundResource)
-            mTextView.setTextColor(resources.getColorStateList(mNovel
-                    .readTextColor))
+            mTextView.setTextColor(ContextCompat.getColor(this@ReadActivity,
+                    mNovel.readTextColor))
         }
 
         fun updateData(content: List<String>) {
@@ -541,7 +543,7 @@ class ReadActivity : BaseActivity() {
         }
 
         fun updateBackground(resourceId: Int) {
-            mTextView.setTextColor(resources.getColorStateList(mNovel
+            mTextView.setTextColor(ContextCompat.getColor(this@ReadActivity, mNovel
                     .readTextColor))
             mTextView.setBackgroundResource(resourceId)
         }

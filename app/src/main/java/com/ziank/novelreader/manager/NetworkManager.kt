@@ -16,8 +16,9 @@ import okhttp3.Request
 import okhttp3.Response
 
 /**
- * Created by zhaixianqi on 2017/9/26.
- */
+* Created by ziank on 2017/9/26.
+* @copyright ziank.2018
+*/
 
 class NetworkManager private constructor() {
     private val mHttpClient = OkHttpClient.Builder()

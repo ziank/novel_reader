@@ -7,8 +7,9 @@ import com.ziank.novelreader.application.NovelApplication
 import com.ziank.novelreader.views.slider.SlideMode
 
 /**
- * Created by zhaixianqi on 2017/11/3.
- */
+* Created by ziank on 2017/11/3.
+* @copyright ziank.2018
+*/
 class ReadSettingViewModel(novel: NovelApplication):BaseObservable() {
     var textSize: Int = novel.readTextSize
     val textSizeString: String

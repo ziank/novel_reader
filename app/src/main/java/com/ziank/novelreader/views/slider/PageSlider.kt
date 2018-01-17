@@ -7,8 +7,9 @@ import android.view.ViewConfiguration
 import android.widget.Scroller
 
 /**
- * Created by zhaixianqi on 2017/10/13.
- */
+* Created by ziank on 2017/10/13.
+* @copyright ziank.2018
+*/
 
 class PageSlider : BaseSlider() {
     private var mScroller: Scroller? = null
@@ -128,8 +129,9 @@ class PageSlider : BaseSlider() {
                             mLeftScrollerView = null
                     }
                     if (mMode == BaseSlider.Companion.MODE_MOVE) {
-                        mVelocityTracker!!.computeCurrentVelocity(1000, ViewConfiguration
-                                .getMaximumFlingVelocity().toFloat())
+                        mVelocityTracker!!.computeCurrentVelocity(1000,
+                                ViewConfiguration.get(mSlidingLayout!!.context)
+                                .scaledMaximumFlingVelocity.toFloat())
                         if (mDirection == BaseSlider.Companion.MOVE_TO_LEFT) {
                             if (mMoveLastPage) {
                                 mLeftScrollerView!!.scrollTo(distance / 2, 0)
@@ -336,12 +338,12 @@ class PageSlider : BaseSlider() {
 
         adapter.moveToNext()
 
-        mSlidingLayout!!.slideSeleted(adapter.getCurrent()!!)
+        mSlidingLayout!!.slideSeleted(adapter.getCurrent())
 
         if (adapter.hasNext()) {
             if (newNextView != null) {
                 val updateNextView = adapter.getView(newNextView,
-                        adapter.getNext()!!)
+                        adapter.getNext())
                 if (updateNextView !== newNextView) {
                     adapter.nextView = updateNextView
                     newNextView = updateNextView
@@ -370,12 +372,12 @@ class PageSlider : BaseSlider() {
 
         adapter.moveToPrevious()
 
-        mSlidingLayout!!.slideSeleted(adapter.getCurrent()!!)
+        mSlidingLayout!!.slideSeleted(adapter.getCurrent())
 
         if (adapter.hasPrevious()) {
             if (newPreView != null) {
                 val updatedPreView = adapter.getView(newPreView,
-                        adapter.getPrevious()!!)
+                        adapter.getPrevious())
                 if (newPreView !== updatedPreView) {
                     adapter.previousView = updatedPreView
                     newPreView = updatedPreView

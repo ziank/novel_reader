@@ -7,8 +7,9 @@ import android.util.AttributeSet
 import android.widget.TextView
 
 /**
- * Created by zhaixianqi on 2017/9/27.
- */
+* Created by ziank on 2017/9/27.
+* @copyright ziank.2018
+*/
 
 class ReadView : android.support.v7.widget.AppCompatTextView {
 

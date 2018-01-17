@@ -7,8 +7,9 @@ import com.ziank.novelreader.R
 import com.ziank.novelreader.views.slider.SlideMode
 
 /**
- * Created by zhaixianqi on 2017/10/12.
- */
+* Created by ziank on 2017/10/12.
+* @copyright ziank.2018
+*/
 
 class NovelApplication : Application() {
 
@@ -17,7 +18,7 @@ class NovelApplication : Application() {
     override fun onCreate() {
         super.onCreate()
         instance = this
-        mPreference = PreferenceManager.getDefaultSharedPreferences(this);
+        mPreference = PreferenceManager.getDefaultSharedPreferences(this)
     }
 
     var readTextSize: Int

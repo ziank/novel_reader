@@ -9,8 +9,9 @@ import android.widget.Scroller
 import kotlin.system.exitProcess
 
 /**
- * Created by zhaixianqi on 2017/9/27.
- */
+* Created by ziank on 2017/9/27.
+* @copyright ziank.2018
+*/
 
 class OverlappedSlider : BaseSlider() {
     private var mScroller: Scroller? = null
@@ -30,7 +31,6 @@ class OverlappedSlider : BaseSlider() {
 
     private var mStartX = 0
     private var mSlidingLayout: SlidingLayout? = null
-    private var mHandler: Handler? = null
 
     private val adapter: SlidingAdapter<List<String>>
         get() = mSlidingLayout!!.adapter as SlidingAdapter<List<String>>
@@ -114,7 +114,9 @@ class OverlappedSlider : BaseSlider() {
                     }
 
                     if (mMode == BaseSlider.MODE_MOVE) {
-                        mVelocityTracker!!.computeCurrentVelocity(1000, ViewConfiguration.getMaximumFlingVelocity().toFloat())
+                        mVelocityTracker!!.computeCurrentVelocity(1000,
+                                ViewConfiguration.get(mSlidingLayout!!.context)
+                                        .scaledMaximumFlingVelocity.toFloat())
                         if (mDirection == BaseSlider.Companion.MOVE_TO_LEFT) {
                             mScrollerView!!.scrollTo(distance, 0)
                         } else {
@@ -238,12 +240,12 @@ class OverlappedSlider : BaseSlider() {
         var newNextView = prevView
 
         adapter.moveToNext()
-        mSlidingLayout!!.slideSeleted(adapter.getCurrent()!!)
+        mSlidingLayout!!.slideSeleted(adapter.getCurrent())
 
         if (adapter.hasNext()) {
             if (newNextView != null) {
                 val updateNextView = adapter.getView(newNextView, adapter
-                        .getNext()!!)
+                        .getNext())
                 if (updateNextView !== newNextView) {
                     adapter.nextView = updateNextView
                     newNextView = updateNextView
@@ -274,11 +276,11 @@ class OverlappedSlider : BaseSlider() {
         var newPrevView = nextView
         adapter.moveToPrevious()
 
-        mSlidingLayout!!.slideSeleted(adapter.getCurrent()!!)
+        mSlidingLayout!!.slideSeleted(adapter.getCurrent())
         if (adapter.hasPrevious()) {
             if (newPrevView != null) {
                 val updatedPrevView = adapter.getView(newPrevView, adapter
-                        .getPrevious()!!)
+                        .getPrevious())
                 if (newPrevView !== updatedPrevView) {
                     adapter.previousView = updatedPrevView
                     newPrevView = updatedPrevView

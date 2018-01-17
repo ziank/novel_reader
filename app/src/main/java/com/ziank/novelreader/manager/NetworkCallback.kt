@@ -1,8 +1,9 @@
 package com.ziank.novelreader.manager
 
 /**
- * Created by zhaixianqi on 2017/9/26.
- */
+* Created by ziank on 2017/9/26.
+* @copyright ziank.2018
+*/
 
 interface NetworkCallback<T> {
     fun success(response: T)

@@ -1,14 +1,16 @@
 package com.ziank.novelreader.views
 
 import android.content.Context
+import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
 import android.widget.TextView
 
 import com.ziank.novelreader.R
 
 /**
- * Created by zhaixianqi on 2017/9/26.
- */
+* Created by ziank on 2017/9/26.
+* @copyright ziank.2018
+*/
 
 class TabbarItemView : android.support.v7.widget.AppCompatTextView {
     private var mTextId: Int = 0
@@ -31,10 +33,12 @@ class TabbarItemView : android.support.v7.widget.AppCompatTextView {
     override fun setSelected(selected: Boolean) {
         super.setSelected(selected)
         if (selected) {
-            setTextColor(resources.getColorStateList(R.color.main_tab_hover))
+            setTextColor(ContextCompat.getColor(context, R.color
+                    .main_tab_hover))
             setCompoundDrawablesRelativeWithIntrinsicBounds(null, context.getDrawable(mHoverDrawableId), null, null)
         } else {
-            setTextColor(resources.getColorStateList(R.color.main_tab))
+            setTextColor(ContextCompat.getColor(context, R.color
+                    .main_tab))
             setCompoundDrawablesRelativeWithIntrinsicBounds(null, context.getDrawable(mDrawableId), null, null)
         }
     }

@@ -1,8 +1,9 @@
 package com.ziank.novelreader.database
 
 /**
- * Created by zhaixianqi on 2017/10/12.
- */
+* Created by ziank on 2017/10/12.
+* @copyright ziank.2018
+*/
 
 import android.database.Cursor
 

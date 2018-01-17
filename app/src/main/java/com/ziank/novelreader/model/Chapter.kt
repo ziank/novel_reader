@@ -7,10 +7,11 @@ import org.json.JSONException
 import org.json.JSONObject
 
 /**
- * Created by zhaixianqi on 2017/10/9.
- */
+* Created by ziank on 2017/10/9.
+* @copyright ziank.2018
+*/
 
-class Chapter : Parcelable {
+class Chapter() : Parcelable {
     var id: Long = 0
 
     var title: String? = null
@@ -18,8 +19,6 @@ class Chapter : Parcelable {
     var url: String? = null
 
     var isDownloaded = false
-
-    constructor() {}
 
     fun toJson(): JSONObject? {
         val `object` = JSONObject()
@@ -35,9 +34,6 @@ class Chapter : Parcelable {
 
         return null
     }
-
-    constructor(source: Parcel) : this(
-    )
 
     override fun describeContents() = 0
 
@@ -55,7 +51,7 @@ class Chapter : Parcelable {
 
         @JvmField
         val CREATOR: Parcelable.Creator<Chapter> = object : Parcelable.Creator<Chapter> {
-            override fun createFromParcel(source: Parcel): Chapter = Chapter(source)
+            override fun createFromParcel(source: Parcel): Chapter = Chapter()
             override fun newArray(size: Int): Array<Chapter?> = arrayOfNulls(size)
         }
     }

@@ -3,44 +3,28 @@ package com.ziank.novelreader.manager
 import android.app.LoaderManager
 import android.content.Context
 import android.content.Loader
-import android.graphics.Paint
-import android.graphics.Typeface
-import android.os.Build
 import android.os.Bundle
 import android.text.TextPaint
 import android.util.Base64
-
 import com.ziank.novelreader.application.NovelApplication
 import com.ziank.novelreader.database.DatabaseManager
 import com.ziank.novelreader.loaders.BookChapterListLoader
 import com.ziank.novelreader.model.Book
 import com.ziank.novelreader.model.Chapter
 import com.ziank.novelreader.model.NovelEvent
-import com.ziank.novelreader.parsers.NovelParser
 import com.ziank.novelreader.parsers.NovelParserFactory
 import com.ziank.novelreader.parsers.QidianParser
-
 import org.greenrobot.eventbus.EventBus
 import org.json.JSONArray
 import org.json.JSONException
-import org.json.JSONObject
-
-import java.io.BufferedReader
-import java.io.File
-import java.io.FileOutputStream
-import java.io.FileReader
-import java.io.IOException
-import java.io.OutputStreamWriter
+import java.io.*
 import java.security.MessageDigest
-import java.util.ArrayList
-import java.util.Collections
-import java.util.function.Predicate
-import kotlin.experimental.and
+import java.util.*
 
 /**
- * Created by zhaixianqi on 2017/9/26.
+ * Created by ziank on 2018/1/16.
+ * @copyright ziank.2018
  */
-
 enum class BookSuggestType {
     SuggestTypeDefault,
     SuggestTypeAdviseWeek,
@@ -110,7 +94,7 @@ class BookManager private constructor() {
     fun searchBook(bookname: String) {
         val urlList = NovelParserFactory.instance
                 .getSearchBookUrlList(bookname)
-        if (urlList == null || urlList.size == 0) {
+        if (urlList.isEmpty()) {
             return
         }
         for (url in urlList) {
@@ -204,13 +188,13 @@ class BookManager private constructor() {
             var line: String? = br.readLine()
 
             while (line != null) {
-                text.append(line!!)
+                text.append(line)
                 text.append('\n')
                 line = br.readLine()
             }
             br.close()
             val array = JSONArray(text.toString())
-            if (array == null || array.length() == 0) {
+            if (array.length() == 0) {
                 return null
             }
             val count = array.length()
@@ -219,7 +203,7 @@ class BookManager private constructor() {
             for (index in 0 until count) {
                 val obj = array.getJSONObject(index)
                 val chapter = Chapter.fromJson(obj)
-                if (null != chapter) {
+                if (0.toLong() != chapter.id) {
                     chapterArrayList.add(chapter)
                 }
             }
@@ -246,7 +230,6 @@ class BookManager private constructor() {
         }
         val file = File(BookManager.instance.novelPath, String
                 .format("%s" + ".json", book.bookCode))
-        val outputStream: FileOutputStream
         try {
             val fOut = FileOutputStream(file)
             val myOutWriter = OutputStreamWriter(fOut)
@@ -264,7 +247,7 @@ class BookManager private constructor() {
                                chapter: Chapter) {
         val urlString = chapter.url
         urlString?.let {
-            NetworkManager.sharedManager.getHttpRequest(urlString!!,
+            NetworkManager.sharedManager.getHttpRequest(urlString,
                     object : NetworkCallback<String> {
                         override fun success(response: String) {
                             val content = NovelParserFactory.instance
@@ -297,7 +280,6 @@ class BookManager private constructor() {
         }
 
         file = File(file, String.format("%s.txt", getMd5(chapter.url!!)))
-        val outputStream: FileOutputStream
         try {
             val fOut = FileOutputStream(file)
             val myOutWriter = OutputStreamWriter(fOut)
@@ -354,7 +336,7 @@ class BookManager private constructor() {
                                         chapters: ArrayList<Chapter>) {
                 for (chapter in chapters) {
                     val content = readContentFromDisk(book, chapter)
-                    if (null == content || content.length == 0) {
+                    if (null == content || content.isEmpty()) {
                         downloadChapterContent(book, chapter)
                     } else {
                         EventBus.getDefault().post(NovelEvent(NovelEvent
@@ -374,38 +356,36 @@ class BookManager private constructor() {
 
     fun downloadChapterList(book: Book) {
         val urlString = book.bookUrl
-        urlString?.let { urlString
-            NetworkManager.sharedManager.getHttpRequest(urlString,
-                    object : NetworkCallback<String> {
-                        override fun success(response: String) {
-                            val chapterList = NovelParserFactory
-                                    .instance.getParser(book)!!
-                                    .parseChapterList(book, response)
-                            writeChapterListToDisk(book, chapterList)
-                            if (null != chapterList && !chapterList.isEmpty()) {
-                                val chapter = chapterList[chapterList
-                                        .size - 1]
-                                if (!chapter.title.equals(book
-                                        .updateContent, ignoreCase = true)) {
-                                    book.isHasUpdate = true
-                                    book.updateContent = chapter.title
-                                    DatabaseManager.sharedManager
-                                            .updateBookStatus(book)
-                                }
+        NetworkManager.sharedManager.getHttpRequest(urlString,
+                object : NetworkCallback<String> {
+                    override fun success(response: String) {
+                        val chapterList = NovelParserFactory
+                                .instance.getParser(book)!!
+                                .parseChapterList(book, response)
+                        writeChapterListToDisk(book, chapterList)
+                        if (!chapterList.isEmpty()) {
+                            val chapter = chapterList[chapterList
+                                    .size - 1]
+                            if (!chapter.title.equals(book
+                                    .updateContent, ignoreCase = true)) {
+                                book.isHasUpdate = true
+                                book.updateContent = chapter.title
+                                DatabaseManager.sharedManager
+                                        .updateBookStatus(book)
                             }
-
-                            val event = NovelEvent(NovelEvent
-                                    .EventTypeFetchChapterList, book)
-                            EventBus.getDefault().post(event)
                         }
 
-                        override fun fail(errorMessage: String?) {
-                            val event = NovelEvent(NovelEvent
-                                    .EventTypeFetchChapterList, book)
-                            EventBus.getDefault().post(event)
-                        }
-                    })
-        }
+                        val event = NovelEvent(NovelEvent
+                                .EventTypeFetchChapterList, book)
+                        EventBus.getDefault().post(event)
+                    }
+
+                    override fun fail(errorMessage: String?) {
+                        val event = NovelEvent(NovelEvent
+                                .EventTypeFetchChapterList, book)
+                        EventBus.getDefault().post(event)
+                    }
+                })
 
     }
 
@@ -463,30 +443,19 @@ class BookManager private constructor() {
         fetchSuggestBookList(BookSuggestType.SuggestTypeAdviseAll)
     }
 
-    fun min3Value(a: Int, b: Int, c: Int): Int {
-        var tmp:Int = 0
-        if (a <= b) {
-            tmp = a
-        } else {
-            tmp = b
-        }
-        if (tmp < c) {
-            return tmp
-        } else {
-            return c
-        }
+    private fun min3Value(a: Int, b: Int, c: Int): Int {
+        val tmp: Int = if (a <= b) a else b
+        return if (tmp < c) tmp else c
     }
 
-    fun getDistenceBetweenString(s1: String, s2: String) :Int {
+    fun getDistanceBetweenString(s1: String, s2: String) :Int {
         val nLenA = s1.length
         val nLenB = s2.length
-        var matrix:Array<Array<Int>> = Array<Array<Int>>(nLenA + 1,
+        val matrix:Array<Array<Int>> = Array<Array<Int>>(nLenA + 1,
                 { Array<Int>(nLenB + 1, { 0 }) })
 
         matrix[0][0] = 0
 
-        var p:Int = 0
-        var q:Int = 0
         for (p in 1 until nLenA + 1) {
             matrix[p][0] = p
         }

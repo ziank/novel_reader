@@ -17,7 +17,6 @@ import android.widget.SearchView
 import com.ziank.novelreader.R
 import com.ziank.novelreader.config.Constants
 import com.ziank.novelreader.databinding.SearchBookItemBinding
-import com.ziank.novelreader.fragments.SuggestBooklistFragment
 import com.ziank.novelreader.manager.BookManager
 import com.ziank.novelreader.model.Book
 import com.ziank.novelreader.model.NovelEvent
@@ -26,8 +25,10 @@ import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
 /**
- * Created by zhaixianqi on 2017/11/6.
- */
+* Created by ziank on 2017/11/6.
+* @copyright ziank.2018
+*/
+
 class SearchBookActivity:BaseActivity() {
     private lateinit var mSearchHistoryView: ListView
     private lateinit var mSearchResultView: ListView
@@ -122,18 +123,18 @@ class SearchBookActivity:BaseActivity() {
         }
 
         override fun getView(i: Int, view: View?, viewGroup: ViewGroup): View {
-            var view = view
-            if (view == null) {
+            var itemView = view
+            if (itemView == null) {
                 val binding = DataBindingUtil.inflate<SearchBookItemBinding>(
                         mInflater, R.layout.search_book_item, viewGroup,
                         false, MyComponent())
-                view = binding.root
-                view!!.tag = binding
+                itemView = binding.root
+                itemView!!.tag = binding
             }
-            val binding = view.tag as SearchBookItemBinding
+            val binding = itemView.tag as SearchBookItemBinding
             binding.book = getItem(i)
 
-            return view
+            return itemView
         }
     }
 
@@ -148,7 +149,7 @@ class SearchBookActivity:BaseActivity() {
         } else {
             mSearchBookResult!!.addAll(result)
             mSearchBookResult!!.sortBy {
-                BookManager.instance.getDistenceBetweenString(it.title!!,
+                BookManager.instance.getDistanceBetweenString(it.title!!,
                         mSearchText)
             }
         }

@@ -8,8 +8,9 @@ import com.ziank.novelreader.R
 import com.ziank.novelreader.model.Book
 
 /**
- * Created by zhaixianqi on 2017/11/1.
- */
+* Created by ziank on 2017/11/1.
+* @copyright ziank.2018
+*/
 class BookItemViewModule(private var mBook: Book) : BaseObservable() {
     val title: String?
         get() = mBook.title

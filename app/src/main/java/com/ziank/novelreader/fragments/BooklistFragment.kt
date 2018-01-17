@@ -18,8 +18,10 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.BaseAdapter
 import android.widget.ListView
+import android.widget.Toast
 
 import com.baoyz.widget.PullRefreshLayout
+import com.kaopiz.kprogresshud.KProgressHUD
 import com.ziank.novelreader.R
 import com.ziank.novelreader.activities.BookMenuListActivity
 import com.ziank.novelreader.activities.BookPageActivity
@@ -60,7 +62,7 @@ class BooklistFragment : BaseFragment(), LoaderManager.LoaderCallbacks<List<Book
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_booklist, container,
                 false)
-        mRefreshLayout = view.findViewById(R.id.refresher);
+        mRefreshLayout = view.findViewById(R.id.refresher)
         mBooklistView = view.findViewById(R.id.book_list)
         mEmptyView = view.findViewById(R.id.empty_view)
         mGotoSuggestView = view.findViewById(R.id.goto_suggest)
@@ -141,6 +143,8 @@ class BooklistFragment : BaseFragment(), LoaderManager.LoaderCallbacks<List<Book
                 startActivity(intent)
             }
             4 -> {
+                Toast.makeText(activity, R.string.start_download, Toast
+                        .LENGTH_SHORT).show()
                 BookManager.instance.downloadBook(book, activity,
                         loaderManager)
             }
@@ -158,11 +162,11 @@ class BooklistFragment : BaseFragment(), LoaderManager.LoaderCallbacks<List<Book
         mBooklist = books.toMutableList()
 
         if (null == mBooklist || mBooklist!!.size == 0) {
-            mEmptyView!!.visibility = View.VISIBLE
-            mRefreshLayout!!.visibility = View.GONE
+            mEmptyView.visibility = View.VISIBLE
+            mRefreshLayout.visibility = View.GONE
         } else {
-            mEmptyView!!.visibility = View.GONE
-            mRefreshLayout!!.visibility = View.VISIBLE
+            mEmptyView.visibility = View.GONE
+            mRefreshLayout.visibility = View.VISIBLE
         }
 
         if (mIsRefreshing) {
@@ -170,7 +174,7 @@ class BooklistFragment : BaseFragment(), LoaderManager.LoaderCallbacks<List<Book
         }
 
         mAdapter!!.notifyDataSetChanged()
-        mRefreshLayout!!.setRefreshing(false)
+        mRefreshLayout.setRefreshing(false)
     }
 
     override fun onLoaderReset(loader: Loader<List<Book>>) {
@@ -178,39 +182,30 @@ class BooklistFragment : BaseFragment(), LoaderManager.LoaderCallbacks<List<Book
     }
 
     private inner class BooklistAdapter internal constructor(context: Context) : BaseAdapter() {
-        private val mInflater: LayoutInflater
+        private val mInflater: LayoutInflater = LayoutInflater.from(context)
 
-        init {
-            mInflater = LayoutInflater.from(context)
-        }
+        override fun getCount(): Int =
+                if (mBooklist == null) 0 else mBooklist!!.size
 
-        override fun getCount(): Int {
-            return if (mBooklist == null) 0 else mBooklist!!.size
-        }
+        override fun getItem(i: Int): Book = mBooklist!![i]
 
-        override fun getItem(i: Int): Book {
-            return mBooklist!![i]
-        }
-
-        override fun getItemId(i: Int): Long {
-            return getItem(i).bookId
-        }
+        override fun getItemId(i: Int): Long = getItem(i).bookId
 
         override fun getView(i: Int, view: View?, viewGroup: ViewGroup?): View {
-            var view = view
-            if (view == null) {
+            var itemView = view
+            if (itemView == null) {
 
                 val binding = BookItemBinding.inflate(mInflater,
                         viewGroup, false, MyComponent())
-                view = binding.root
-                view!!.tag = binding
+                itemView = binding.root
+                itemView!!.tag = binding
             }
 
             val book = getItem(i)
-            val binding = view.tag as BookItemBinding
+            val binding = itemView.tag as BookItemBinding
             binding.book = BookItemViewModule(book)
 
-            return view
+            return itemView
         }
     }
 

@@ -8,8 +8,9 @@ import com.ziank.novelreader.R
 import com.ziank.novelreader.views.ReadBackgroundShowView
 
 /**
- * Created by zhaixianqi on 2017/11/1.
- */
+* Created by ziank on 2017/11/1.
+* @copyright ziank.2018
+*/
 class MyComponent:DataBindingComponent {
     override fun getMyComponent(): MyComponent {
         return MyComponent()
@@ -25,7 +26,7 @@ class MyComponent:DataBindingComponent {
 
     @BindingAdapter("select")
     fun selectImage(view: ReadBackgroundShowView, selected: Boolean) {
-        view.choosed = selected
+        view.chosen = selected
         view.invalidate()
     }
 

@@ -25,8 +25,9 @@ import java.io.OutputStreamWriter
 import java.util.ArrayList
 
 /**
- * Created by zhaixianqi on 2017/10/23.
- */
+* Created by ziank on 2017/10/23.
+* @copyright ziank.2018
+*/
 
 class BookChapterListLoader(context: Context, private val mBook: Book) : AsyncTaskLoader<ArrayList<Chapter>>(context) {
 
@@ -37,7 +38,7 @@ class BookChapterListLoader(context: Context, private val mBook: Book) : AsyncTa
     override fun loadInBackground(): ArrayList<Chapter>? {
         val chapterList = BookManager.instance
                 .readChapterListFromDisk(mBook)
-        if (null != chapterList && chapterList!!.size > 0) {
+        if (null != chapterList && chapterList.size > 0) {
             return chapterList
         }
         BookManager.instance.downloadChapterList(mBook)

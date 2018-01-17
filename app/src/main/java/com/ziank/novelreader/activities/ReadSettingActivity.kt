@@ -20,8 +20,9 @@ import com.ziank.novelreader.views.slider.SlideMode
 import org.greenrobot.eventbus.EventBus
 
 /**
- * Created by zhaixianqi on 2017/11/2.
- */
+* Created by ziank on 2017/11/2.
+* @copyright ziank.2018
+*/
 class ReadSettingActivity: BaseActivity() {
     private lateinit var mToolbar:Toolbar
     private lateinit var mReadToolbar:View
@@ -80,7 +81,7 @@ class ReadSettingActivity: BaseActivity() {
         detailBtn.setOnClickListener(block)
     }
 
-    public fun onClickView(view: View) {
+    fun onClickView(view: View) {
         when(view.id) {
             R.id.catalog_btn -> {
                 setResult(Constants.RESULT_OPEN_CATALOG)

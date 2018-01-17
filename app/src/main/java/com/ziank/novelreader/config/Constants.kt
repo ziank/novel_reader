@@ -1,8 +1,9 @@
 package com.ziank.novelreader.config
 
 /**
- * Created by zhaixianqi on 2017/10/10.
- */
+* Created by ziank on 2017/10/10.
+* @copyright ziank.2018
+*/
 
 object Constants {
     val BOOK = "book"

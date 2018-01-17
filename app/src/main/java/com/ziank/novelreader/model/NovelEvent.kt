@@ -1,8 +1,9 @@
 package com.ziank.novelreader.model
 
 /**
- * Created by zhaixianqi on 2017/10/19.
- */
+* Created by ziank on 2017/10/19.
+* @copyright ziank.2018
+*/
 
 class NovelEvent(var eventType: Int,
                  var eventData: Any?) {

@@ -12,8 +12,9 @@ import com.ziank.novelreader.parsers.NovelParserFactory
 import java.io.Serializable
 
 /**
- * Created by zhaixianqi on 2017/9/26.
- */
+* Created by ziank on 2017/9/26.
+* @copyright ziank.2018
+*/
 
 class Book : Serializable {
     var bookCode: String? = null

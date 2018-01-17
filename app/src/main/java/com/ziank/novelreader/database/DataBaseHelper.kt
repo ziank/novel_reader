@@ -6,8 +6,9 @@ import android.database.sqlite.SQLiteOpenHelper
 import android.provider.BaseColumns
 
 /**
- * Created by zhaixianqi on 2017/10/12.
- */
+* Created by ziank on 2017/10/12.
+* @copyright ziank.2018
+*/
 
 class DataBaseHelper(context: Context, dbName: String, factory:
 SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, dbName, factory, version) {

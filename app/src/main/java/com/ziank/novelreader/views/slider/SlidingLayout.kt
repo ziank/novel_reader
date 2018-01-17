@@ -11,8 +11,9 @@ import android.view.View
 import android.view.ViewGroup
 
 /**
- * Created by zhaixianqi on 2017/9/27.
- */
+* Created by ziank on 2017/9/27.
+* @copyright ziank.2018
+*/
 
 typealias OnTapListener = (MotionEvent)->Unit
 
@@ -28,7 +29,7 @@ class SlidingLayout : ViewGroup {
             field = adapter
             this.adapter!!.setSlidingLayout(this)
             if (mRestoredAdapterState != null) {
-                this.adapter!!.restoreState(mRestoredAdapterState!!, mRestoredClassLoader!!)
+                this.adapter!!.restoreState()
                 mRestoredAdapterState = null
                 mRestoredClassLoader = null
             }
@@ -137,12 +138,12 @@ class SlidingLayout : ViewGroup {
         }
 
         internal constructor(`in`: Parcel, loader: ClassLoader?) : super(`in`) {
-            var loader = loader
-            if (loader == null) {
-                loader = javaClass.classLoader
+            var classLoader = loader
+            if (classLoader == null) {
+                classLoader = javaClass.classLoader
             }
-            mAdapterState = `in`.readParcelable(loader)
-            mLoader = loader!!
+            mAdapterState = `in`.readParcelable(classLoader)
+            mLoader = classLoader!!
         }
 
         companion object {
@@ -177,7 +178,7 @@ class SlidingLayout : ViewGroup {
         super.onRestoreInstanceState(state.superState)
 
         if (adapter != null) {
-            adapter!!.restoreState(state.mAdapterState!!, state.mLoader)
+            adapter!!.restoreState()
         } else {
             mRestoredAdapterState = state.mAdapterState
             mRestoredClassLoader = state.mLoader
