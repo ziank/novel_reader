@@ -21,6 +21,7 @@ import com.ziank.novelreader.fragments.SuggestBooklistFragment
 import com.ziank.novelreader.manager.BookManager
 import com.ziank.novelreader.model.Book
 import com.ziank.novelreader.model.NovelEvent
+import com.ziank.novelreader.view_models.MyComponent
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
 
@@ -78,6 +79,8 @@ class SearchBookActivity:BaseActivity() {
                     mSearchResultView.visibility = View.VISIBLE
                     mSearchHistoryView.visibility = View.GONE
                     mSearchBookHint.visibility = View.GONE
+                    mSearchBookResult?.clear()
+                    mSearchText = book_name
                     BookManager.instance.searchBook(book_name)
                     searchView.clearFocus()
                     showProgressHud()
@@ -88,9 +91,7 @@ class SearchBookActivity:BaseActivity() {
                     mSearchResultView.visibility = View.GONE
                     mSearchHistoryView.visibility = View.VISIBLE
                     mSearchBookHint.visibility = View.VISIBLE
-                    if (null != mSearchBookResult) {
-                        mSearchBookResult!!.clear()
-                    }
+                    mSearchBookResult?.clear()
 
                     return true
                 }
@@ -123,7 +124,9 @@ class SearchBookActivity:BaseActivity() {
         override fun getView(i: Int, view: View?, viewGroup: ViewGroup): View {
             var view = view
             if (view == null) {
-                val binding = DataBindingUtil.inflate<SearchBookItemBinding>(mInflater, R.layout.search_book_item, viewGroup, false)
+                val binding = DataBindingUtil.inflate<SearchBookItemBinding>(
+                        mInflater, R.layout.search_book_item, viewGroup,
+                        false, MyComponent())
                 view = binding.root
                 view!!.tag = binding
             }
@@ -144,6 +147,10 @@ class SearchBookActivity:BaseActivity() {
             mSearchBookResult = result.toMutableList()
         } else {
             mSearchBookResult!!.addAll(result)
+            mSearchBookResult!!.sortBy {
+                BookManager.instance.getDistenceBetweenString(it.title!!,
+                        mSearchText)
+            }
         }
         hideProgressHud()
         mSearchResultAdapter.notifyDataSetChanged()

@@ -462,4 +462,49 @@ class BookManager private constructor() {
     fun fetchAdviseAllBookList() {
         fetchSuggestBookList(BookSuggestType.SuggestTypeAdviseAll)
     }
+
+    fun min3Value(a: Int, b: Int, c: Int): Int {
+        var tmp:Int = 0
+        if (a <= b) {
+            tmp = a
+        } else {
+            tmp = b
+        }
+        if (tmp < c) {
+            return tmp
+        } else {
+            return c
+        }
+    }
+
+    fun getDistenceBetweenString(s1: String, s2: String) :Int {
+        val nLenA = s1.length
+        val nLenB = s2.length
+        var matrix:Array<Array<Int>> = Array<Array<Int>>(nLenA + 1,
+                { Array<Int>(nLenB + 1, { 0 }) })
+
+        matrix[0][0] = 0
+
+        var p:Int = 0
+        var q:Int = 0
+        for (p in 1 until nLenA + 1) {
+            matrix[p][0] = p
+        }
+        for (q in 1 until nLenB + 1) {
+            matrix[0][q] = q
+        }
+
+        for (j in 1 until nLenA + 1) {
+            for (k in 1 until nLenB + 1) {
+                var Fjk = 0
+                if (s1[j - 1] != s2[k - 1]) {
+                    Fjk = 1
+                }
+                matrix[j][k] = min3Value(matrix[j - 1][k] + 1, matrix[j][k -
+                        1] + 1, matrix[j - 1][k - 1] + Fjk)
+            }
+        }
+
+        return matrix[nLenA][nLenB]
+    }
 }

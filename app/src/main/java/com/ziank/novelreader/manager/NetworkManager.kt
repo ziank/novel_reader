@@ -28,7 +28,10 @@ class NetworkManager private constructor() {
     }
 
     fun getHttpRequest(urlString: String, networkCallback: NetworkCallback<String>) {
-        val request = Request.Builder().url(urlString).addHeader("Content-Type", "text/json;Charset=UTF-8").build()
+        val request = Request.Builder().url(urlString).addHeader("Content-Type", "text/json;Charset=UTF-8").
+                addHeader("User-Agent", "Mozilla/5.0 (Macintosh; Intel " +
+                        "Mac OS X 10_13_2) AppleWebKit/537.36 (KHTML, like " +
+                        "Gecko) Chrome/63.0.3239.132 Safari/537.36").build()
         mHttpClient.newCall(request).enqueue(object : Callback {
             override fun onFailure(call: Call, e: IOException) {
                 networkCallback.fail(e.message)

@@ -3,34 +3,32 @@ package com.ziank.novelreader.parsers
 import com.ziank.novelreader.R
 import com.ziank.novelreader.model.Book
 import com.ziank.novelreader.model.Chapter
-
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Document
-import org.jsoup.nodes.Element
-import org.jsoup.select.Elements
-
 import java.net.MalformedURLException
 import java.net.URL
 import java.util.ArrayList
 
 /**
- * Created by zhaixianqi on 2017/10/9.
+ * Created by zhaixianqi on 2018/1/16.
+ * @copyright NetEase.2017
  */
-
-class QududuParser() : BaseParser() {
+class SanjianggeParser: BaseParser() {
 
     override val resourceId: Int
-        get() = R.drawable.icon_qududu
+        get() = R.drawable.icon_sanjiangge
 
     override val hostIdentifier: String
-        get() = ".qududu."
+        get() = "sanjiangge.com"
 
     override fun getSearchBookUrl(bookName: String): String {
-        return String.format("http://so.qududu.org/cse/search?" +
-                "s=5058594308470912435&q=%s", bookName)
+        return String.format("http://zhannei.baidu" +
+                ".com/cse/search?s=7818637081234473025&entry=1&q=%s" +
+                "&isNeedCheckDomain=1&jump=1", bookName)
     }
 
-    override fun getDownloadBookUrl(book: Book): String = book.bookUrl
+    override fun getDownloadBookUrl(book: Book): String {
+        return book.bookUrl
+    }
 
     override fun parseBookList(htmlContent: String): ArrayList<Book>? {
         val document = Jsoup.parse(htmlContent)
@@ -53,7 +51,7 @@ class QududuParser() : BaseParser() {
             var bookUrl = ""
             if (null != titleTag) {
                 bookUrl = titleTag.attr("href")//.replace("qududu.org",
-                        //"qududu.net")
+                //"qududu.net")
             }
 
             val summaryTag = element.select("p.result-game-item-desc")
@@ -74,7 +72,7 @@ class QududuParser() : BaseParser() {
             val book = Book(title, author, bookUrl, updateContent)
             book.summary = summary
             book.bookCoverUrl = coverUrl//.replace("qududu.org",
-                    //"qududu.net")
+            //"qududu.net")
             books.add(book)
         }
         return books
@@ -82,7 +80,7 @@ class QududuParser() : BaseParser() {
 
     override fun parseChapterList(book: Book, htmlContent: String): ArrayList<Chapter> {
         val document = Jsoup.parse(htmlContent)
-        val chapterTagList = document.select("div.kui-item")
+        val chapterTagList = document.getElementsByTag("dd")
         val count = chapterTagList.size
         val chapterList = ArrayList<Chapter>()
         for (i in 0 until count) {
@@ -121,7 +119,7 @@ class QududuParser() : BaseParser() {
 
     override fun parseChapterContent(htmlContent: String): String {
         val document = Jsoup.parse(htmlContent)
-        val body = document.getElementById("kui-page-read-txt") ?: return ""
+        val body = document.getElementById("content") ?: return ""
         body.select("br").append("\\n")
         body.select("p").prepend("\\n")
         var content = body.text()

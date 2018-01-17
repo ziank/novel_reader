@@ -28,4 +28,9 @@ class MyComponent:DataBindingComponent {
         view.choosed = selected
         view.invalidate()
     }
+
+    @BindingAdapter("imageSrc")
+    fun loadImage(view: ImageView, imageSrc: Int) {
+        view.setImageResource(imageSrc)
+    }
 }

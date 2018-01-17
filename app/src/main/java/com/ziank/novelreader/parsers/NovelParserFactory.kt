@@ -14,12 +14,13 @@ class NovelParserFactory private constructor() {
     init {
         mParserList = ArrayList()
         mParserList.add(QududuParser())
+        mParserList.add(SanjianggeParser())
     }
 
     fun getParser(book: Book): NovelParser? {
         for (parser in mParserList) {
             val identifier = parser.hostIdentifier.toLowerCase()
-            if (book.bookUrl!!.toLowerCase().contains(identifier)) {
+            if (book.bookUrl.toLowerCase().contains(identifier)) {
                 return parser
             }
         }
@@ -33,6 +34,14 @@ class NovelParserFactory private constructor() {
                 return parser
             }
         }
+        if (url.toLowerCase().contains("7818637081234473025")) {
+            for (parser in mParserList) {
+                if (parser is SanjianggeParser) {
+                    return parser
+                }
+            }
+        }
+
         return null
     }
 

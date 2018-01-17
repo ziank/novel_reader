@@ -14,6 +14,14 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+
+        <ImageView
+            android:layout_width="75dp"
+            android:layout_height="50dp"
+            android:layout_centerVertical="true"
+            android:layout_alignParentEnd="true"
+            app:imageSrc="@{book.bookResourceId}"/>
+
         <ImageView
             android:id="@+id/book_cover"
             android:layout_width="80dp"
