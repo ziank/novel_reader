@@ -26,7 +26,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
         initListeners()
         initTabbars()
 
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar:Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
     }
 
@@ -37,12 +37,12 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     private fun initListeners() {
         mFragManager = fragmentManager
 
-        val booklistView = findViewById(R.id.tabbar_booklist) as TabbarItemView
+        val booklistView:TabbarItemView = findViewById(R.id.tabbar_booklist)
         booklistView.initTabs(R.string.my_book_list, R.drawable.maintab_bookstand_icon, R.drawable.maintab_bookstand_icon_hover)
         booklistView.setOnClickListener(this)
         mTabbarItems[0] = booklistView
 
-        val suggestView = findViewById(R.id.tabbar_suggest) as TabbarItemView
+        val suggestView:TabbarItemView = findViewById(R.id.tabbar_suggest)
         suggestView.initTabs(R.string.suggest_book_list, R.drawable.maintab_city_icon, R.drawable.maintab_city_icon_hover)
         suggestView.setOnClickListener(this)
         mTabbarItems[1] = suggestView

@@ -44,12 +44,12 @@ class SearchBookActivity:BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_search_book)
 
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar:Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
-        mSearchHistoryView = findViewById(R.id.search_history) as ListView
-        mSearchResultView = findViewById(R.id.search_result) as ListView
+        mSearchHistoryView = findViewById(R.id.search_history)
+        mSearchResultView = findViewById(R.id.search_result)
         mSearchBookHint = findViewById(R.id.search_book_hint)
         mHandler = Handler()
 

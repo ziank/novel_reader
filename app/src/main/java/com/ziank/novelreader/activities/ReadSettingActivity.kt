@@ -70,14 +70,14 @@ class ReadSettingActivity: BaseActivity() {
     }
 
     private fun initListeners() {
-        val catalogBtn = findViewById(R.id.catalog_btn)
+        val catalogBtn:TextView = findViewById(R.id.catalog_btn)
         val block = { view:View ->
             onClickView(view)
         }
         catalogBtn.setOnClickListener(block)
-        val settingBtn = findViewById(R.id.setting_btn)
+        val settingBtn:TextView = findViewById(R.id.setting_btn)
         settingBtn.setOnClickListener(block)
-        val detailBtn = findViewById(R.id.detail_btn)
+        val detailBtn:TextView = findViewById(R.id.detail_btn)
         detailBtn.setOnClickListener(block)
     }
 

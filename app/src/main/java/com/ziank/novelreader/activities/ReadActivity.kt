@@ -1,16 +1,15 @@
 package com.ziank.novelreader.activities
 
 import android.app.LoaderManager
-import android.content.Intent
-import android.content.Loader
-import android.os.Handler
+import android.content.*
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
+import android.widget.ProgressBar
 import android.widget.TextView
-
 import com.ziank.novelreader.R
 import com.ziank.novelreader.config.Constants
 import com.ziank.novelreader.loaders.BookChapterListLoader
@@ -20,19 +19,34 @@ import com.ziank.novelreader.model.Chapter
 import com.ziank.novelreader.model.NovelEvent
 import com.ziank.novelreader.views.ReadView
 import com.ziank.novelreader.views.slider.*
-
 import org.jsoup.helper.StringUtil
-
-import java.util.ArrayList
+import java.text.SimpleDateFormat
+import java.util.*
 
 class ReadActivity : BaseActivity() {
     private lateinit var mTitleView: TextView
+    private lateinit var mBatteryView: ProgressBar
+    private lateinit var mTimeLabel: TextView
+    private lateinit var mProgressLabel: TextView
+
+    private var mBatInfoReceiver: BroadcastReceiver = object:
+            BroadcastReceiver() {
+        override fun onReceive(context: Context?, intent: Intent?) {
+            intent?.let {
+                if (intent.action == Intent.ACTION_BATTERY_CHANGED) {
+                    val batteryLevel = intent.getIntExtra("level", 0)
+                    mBatteryView.progress = 100 - batteryLevel
+                }
+            }
+        }
+    }
 
     private lateinit var mBook: Book
     private var mChapters: List<Chapter>? = null
     private var mChapterIndex = 0
     private var mCurrentLineIndex = 0
     private var mCurrentCharIndex: Int = 0
+    private val mDateFormat = SimpleDateFormat("HH:mm", Locale.getDefault())
 
     private lateinit var mSlidingLayout: SlidingLayout
 
@@ -47,19 +61,16 @@ class ReadActivity : BaseActivity() {
             windowManager.defaultDisplay.getMetrics(dm)
             return dm.widthPixels - dm.scaledDensity * 30
         }
-    val readTextSizeFloat: Float
-        get() {
-            val dm = DisplayMetrics()
-            windowManager.defaultDisplay.getMetrics(dm)
-            return mNovel.readTextSize.toFloat()
-        }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_read)
 
-        mSlidingLayout = findViewById(R.id.sliding_container) as SlidingLayout
-        mTitleView = findViewById(R.id.chapter_title) as TextView
+        mSlidingLayout = findViewById(R.id.sliding_container)
+        mTitleView = findViewById(R.id.chapter_title)
+        mBatteryView = findViewById(R.id.footer_bar_battery)
+        mTimeLabel = findViewById(R.id.footer_bar_time)
+        mProgressLabel = findViewById(R.id.footer_bar_progress)
 
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -71,6 +82,13 @@ class ReadActivity : BaseActivity() {
 
         initViews()
         initData()
+
+        registerReceiver(mBatInfoReceiver, IntentFilter(Intent.ACTION_BATTERY_CHANGED))
+    }
+
+    override fun onDestroy() {
+        unregisterReceiver(mBatInfoReceiver)
+        super.onDestroy()
     }
 
     private fun initViews() {
@@ -230,6 +248,8 @@ class ReadActivity : BaseActivity() {
                 mSlidingAdapter.setPreviousChapterContent(text)
             }
         }
+
+        mSlidingAdapter.updateFooterBar()
     }
 
     private fun reloadData(chapterContent: String) {
@@ -281,6 +301,8 @@ class ReadActivity : BaseActivity() {
                 }
             }
         }
+
+        mTimeLabel.text = mDateFormat.format(Date())
         super.onActivityResult(requestCode, resultCode, data)
     }
 
@@ -443,6 +465,7 @@ class ReadActivity : BaseActivity() {
                     }
                 }
             }
+            updateFooterBar()
         }
 
         override fun computePrevious() {
@@ -467,6 +490,8 @@ class ReadActivity : BaseActivity() {
             }
             mCurrentLineIndex = if (mCurrentLineIndex >= 0) mCurrentLineIndex else 0
             mCurrentCharIndex = getReadCharIndex()
+
+            updateFooterBar()
         }
 
         fun getLineNumber(charIndex: Int): Int {
@@ -478,7 +503,7 @@ class ReadActivity : BaseActivity() {
                     var charCount = 0
                     for ((index, line) in mCurrentChapterContent!!.withIndex()) {
                         charCount += line.length
-                        if (charIndex <= charCount) {
+                        if (charIndex < charCount) {
                             return index
                         }
                     }
@@ -508,6 +533,22 @@ class ReadActivity : BaseActivity() {
             reloadData()
             BookManager.instance.paint = mReadView.paint
         }
+
+        fun updateFooterBar() {
+            if (mChapters == null) {
+                mProgressLabel.text = "0%%"
+            } else {
+                var progress:Float = mChapterIndex.toFloat() * 100 / mChapters!!
+                        .count()
+                mCurrentChapterContent?.let {
+                    progress += mCurrentLineIndex.toFloat() * 100 / mChapters!!
+                            .count() / mCurrentChapterContent!!.count()
+                }
+                mProgressLabel.text = "%.2f%%".format(progress)
+            }
+
+            mTimeLabel.text = mDateFormat.format(Date())
+        }
     }
 
 
@@ -529,8 +570,6 @@ class ReadActivity : BaseActivity() {
         private val mTextView: TextView = contentView.findViewById(R.id.text_content)
         init {
             updateBackground(mNovel.backgroundResource)
-            mTextView.setTextColor(ContextCompat.getColor(this@ReadActivity,
-                    mNovel.readTextColor))
         }
 
         fun updateData(content: List<String>) {
@@ -543,9 +582,12 @@ class ReadActivity : BaseActivity() {
         }
 
         fun updateBackground(resourceId: Int) {
-            mTextView.setTextColor(ContextCompat.getColor(this@ReadActivity, mNovel
-                    .readTextColor))
             mTextView.setBackgroundResource(resourceId)
+            val textColor = ContextCompat.getColor(this@ReadActivity,
+                    mNovel.readTextColor)
+            mTextView.setTextColor(textColor)
+            mTimeLabel.setTextColor(textColor)
+            mProgressLabel.setTextColor(textColor)
         }
     }
 

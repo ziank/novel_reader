@@ -41,7 +41,7 @@ class BookMenuListActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Array
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_book_menu_list)
 
-        mMenuListView = findViewById(R.id.menu_list) as ListView
+        mMenuListView = findViewById(R.id.menu_list)
 
         mHandler = Handler()
 
@@ -81,7 +81,7 @@ class BookMenuListActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Array
 
         }
 
-        val toolbar = findViewById(R.id.toolbar) as Toolbar
+        val toolbar:Toolbar = findViewById(R.id.toolbar)
         setSupportActionBar(toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
