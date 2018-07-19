@@ -16,6 +16,7 @@ import com.ziank.novelreader.databinding.ActivityReadSettingBinding
 import com.ziank.novelreader.model.NovelEvent
 import com.ziank.novelreader.view_models.MyComponent
 import com.ziank.novelreader.view_models.ReadSettingViewModel
+import com.ziank.novelreader.views.slider.FontType
 import com.ziank.novelreader.views.slider.SlideMode
 import org.greenrobot.eventbus.EventBus
 
@@ -205,6 +206,24 @@ class ReadSettingActivity: BaseActivity() {
                 EventBus.getDefault().post(event)
                 mReadSettingModel.slideMode = SlideMode.OverlappedMode
                 mReadSettingModel.notifyPropertyChanged(BR.slideMode)
+            }
+
+            R.id.font_normal -> {
+                val event = NovelEvent(NovelEvent.EventtypeChangeFontTypeface, FontType.Normal)
+                mNovel.fontType = FontType.Normal
+
+                EventBus.getDefault().post(event)
+                mReadSettingModel.fontType = FontType.Normal
+                mReadSettingModel.notifyPropertyChanged(BR.fontType)
+            }
+
+            R.id.font_kaiti -> {
+                val event = NovelEvent(NovelEvent.EventtypeChangeFontTypeface, FontType.Kaiti)
+                mNovel.fontType = FontType.Kaiti
+
+                EventBus.getDefault().post(event)
+                mReadSettingModel.fontType = FontType.Kaiti
+                mReadSettingModel.notifyPropertyChanged(BR.fontType)
             }
         }
     }

@@ -18,5 +18,6 @@ class NovelEvent(var eventType: Int,
         val EventTypeChangeSlideMode: Int = EventTypeChangeReadBg + 1
         val EventTypeChangeFontSize: Int = EventTypeChangeSlideMode + 1
         val EventTypeSuggestResult: Int = EventTypeChangeFontSize + 1
+        val EventtypeChangeFontTypeface: Int = EventTypeSuggestResult + 1
     }
 }

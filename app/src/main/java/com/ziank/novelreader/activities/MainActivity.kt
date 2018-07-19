@@ -5,6 +5,7 @@ import android.app.FragmentManager
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
 import android.view.View
+import android.widget.Toast
 
 import com.ziank.novelreader.R
 import com.ziank.novelreader.fragments.BooklistFragment
@@ -114,6 +115,19 @@ class MainActivity : BaseActivity(), View.OnClickListener {
 
     private fun getFragmentTag(index: Int): String {
         return "main_tab_" + index
+    }
+
+    private var lastPressBackTime: Long = 0
+
+    override fun onBackPressed() {
+        val curTime = System.currentTimeMillis()
+        if (curTime - lastPressBackTime < 3000) {
+            super.onBackPressed()
+        } else {
+            lastPressBackTime = curTime
+            Toast.makeText(this, R.string.back_press_again, Toast
+                    .LENGTH_SHORT).show()
+        }
     }
 
     companion object {

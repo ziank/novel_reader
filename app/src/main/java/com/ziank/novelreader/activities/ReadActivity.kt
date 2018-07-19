@@ -2,9 +2,12 @@ package com.ziank.novelreader.activities
 
 import android.app.LoaderManager
 import android.content.*
+import android.content.res.AssetManager
+import android.graphics.Typeface
 import android.os.Bundle
 import android.os.Handler
 import android.support.v4.content.ContextCompat
+import android.text.Html
 import android.util.DisplayMetrics
 import android.view.View
 import android.view.WindowManager
@@ -114,7 +117,7 @@ class ReadActivity : BaseActivity() {
         }
 
         mSlidingAdapter = ReadSlidingAdapter()
-        mSlidingAdapter.setCurrentChapterContent(BookManager.instance.testContent())
+        mSlidingAdapter.setCurrentChapterContent("测试", BookManager.instance.testContent())
         mSlidingLayout.adapter = mSlidingAdapter
 
         switchSlidingMode(mNovel.getSlideMode())
@@ -163,14 +166,14 @@ class ReadActivity : BaseActivity() {
                         .getChapterContent(mBook, chapter)
                 content?.let {
                     if (chapter.url == mChapters!![mChapterIndex].url) {
-                        mSlidingAdapter.setCurrentChapterContent(content)
+                        mSlidingAdapter.setCurrentChapterContent(if (chapter.title.isNullOrEmpty()) { "第${chapter.id + 1}章" } else { chapter.title!! } , content)
                         hideProgressHud()
                     } else if (mChapterIndex > 0 && chapter.url ==
                             mChapters!![mChapterIndex - 1].url) {
-                        mSlidingAdapter.setPreviousChapterContent(content)
+                        mSlidingAdapter.setPreviousChapterContent(if (chapter.title.isNullOrEmpty()) { "第${chapter.id + 1}章" } else { chapter.title!! } , content)
                     } else if (mChapterIndex < mChapters!!.size - 1 && chapter
                             .id == mChapters!![mChapterIndex + 1].id) {
-                        mSlidingAdapter.setNextChapterContent(content)
+                        mSlidingAdapter.setNextChapterContent(if (chapter.title.isNullOrEmpty()) { "第${chapter.id + 1}章" } else { chapter.title!! } , content)
                     }
                     mSlidingAdapter.notifyDataSetChanged()
                 }
@@ -189,6 +192,9 @@ class ReadActivity : BaseActivity() {
             }
             NovelEvent.EventTypeChangeFontSize -> {
                 mSlidingAdapter.refreshTextSize()
+            }
+            NovelEvent.EventtypeChangeFontTypeface -> {
+                mSlidingAdapter.refreshTypeface()
             }
         }
     }
@@ -235,7 +241,7 @@ class ReadActivity : BaseActivity() {
             if (text == null || text.isEmpty()) {
                 BookManager.instance.downloadChapterContent(mBook, nextChapter)
             } else {
-                mSlidingAdapter.setNextChapterContent(text)
+                mSlidingAdapter.setNextChapterContent(if (nextChapter.title.isNullOrEmpty()) { "第${nextChapter.id + 1}章" } else { nextChapter.title!! } , text)
             }
         }
 
@@ -245,7 +251,7 @@ class ReadActivity : BaseActivity() {
             if (text == null || text.isEmpty()) {
                 BookManager.instance.downloadChapterContent(mBook, prevChapter)
             } else {
-                mSlidingAdapter.setPreviousChapterContent(text)
+                mSlidingAdapter.setPreviousChapterContent(if (prevChapter.title.isNullOrEmpty()) { "第${prevChapter.id + 1}章" } else { prevChapter.title!! } , text)
             }
         }
 
@@ -253,7 +259,8 @@ class ReadActivity : BaseActivity() {
     }
 
     private fun reloadData(chapterContent: String) {
-        mSlidingAdapter.setCurrentChapterContent(chapterContent)
+        val chapter = mChapters!![mChapterIndex]
+        mSlidingAdapter.setCurrentChapterContent(if (chapter.title.isNullOrEmpty()) { "第${chapter.id + 1}章" } else { chapter.title!! } , chapterContent)
         mCurrentLineIndex = mSlidingAdapter.getLineNumber(mCurrentCharIndex)
         mSlidingAdapter.notifyDataSetChanged()
     }
@@ -329,23 +336,24 @@ class ReadActivity : BaseActivity() {
             mReadView = contentView.findViewById<TextView>(R.id
                     .text_content) as ReadView
             mReadView.textSize = mNovel.readTextSize.toFloat()
+            mReadView.typeface = mNovel.fontFace
             BookManager.instance.paint = mReadView.paint
         }
 
-        fun setCurrentChapterContent(text: String) {
+        fun setCurrentChapterContent(title: String, text: String) {
             mCurrentContentString = text
             this.mCurrentChapterContent = BookManager.instance
-                    .splitTextWithTextSize(text, readContentWidth)
+                    .splitTextWithTextSize(title, text, readContentWidth)
         }
 
-        fun setNextChapterContent(text: String) {
+        fun setNextChapterContent(title: String, text: String) {
             this.mNextChapterContent = BookManager.instance
-                    .splitTextWithTextSize(text, readContentWidth)
+                    .splitTextWithTextSize(title, text, readContentWidth)
         }
 
-        fun setPreviousChapterContent(text: String) {
+        fun setPreviousChapterContent(title: String, text: String) {
             this.mPreviousChapterContent = BookManager.instance
-                    .splitTextWithTextSize(text, readContentWidth)
+                    .splitTextWithTextSize(title, text, readContentWidth)
         }
 
         override fun getView(contentView: View?, content: List<String>): View {
@@ -365,9 +373,10 @@ class ReadActivity : BaseActivity() {
             if (mCurrentLineIndex >= mCurrentChapterContent!!.size) {
                 return mCurrentChapterContent!!
             }
-            return if (mCurrentLineIndex + mLineNumber < mCurrentChapterContent!!.size) {
+            val lineNumber = if (mCurrentLineIndex == 0) { mLineNumber - 1 } else { mLineNumber }
+            return if (mCurrentLineIndex + lineNumber < mCurrentChapterContent!!.size) {
                 mCurrentChapterContent!!
-                        .subList(mCurrentLineIndex, mCurrentLineIndex + mLineNumber)
+                        .subList(mCurrentLineIndex, mCurrentLineIndex + lineNumber)
             } else {
                 mCurrentChapterContent!!
                         .subList(mCurrentLineIndex, mCurrentChapterContent!!.size)
@@ -379,21 +388,21 @@ class ReadActivity : BaseActivity() {
             val lineCount = readView.lineCount
 
             val nextIndex = mCurrentLineIndex + lineCount
-            if (nextIndex + mLineNumber < mCurrentChapterContent!!.size) {
-                return mCurrentChapterContent!!
+            when {
+                nextIndex + mLineNumber < mCurrentChapterContent!!.size -> return mCurrentChapterContent!!
                         .subList(nextIndex, nextIndex + mLineNumber)
-            } else if (nextIndex < mCurrentChapterContent!!.size) {
-                return mCurrentChapterContent!!
+                nextIndex < mCurrentChapterContent!!.size - 1 -> return mCurrentChapterContent!!
                         .subList(nextIndex, mCurrentChapterContent!!.size)
-            } else {
-                if (mNextChapterContent == null) {
-                    return ArrayList()
-                }
-                return if (mNextChapterContent!!.size > mLineNumber) {
-                    mNextChapterContent!!.subList(0, mLineNumber)
-                } else {
-                    mNextChapterContent!!.subList(0, mNextChapterContent!!
-                            .size)
+                else -> {
+                    if (mNextChapterContent == null) {
+                        return ArrayList()
+                    }
+                    return if (mNextChapterContent!!.size > mLineNumber - 1) {
+                        mNextChapterContent!!.subList(0, mLineNumber - 1)
+                    } else {
+                        mNextChapterContent!!.subList(0, mNextChapterContent!!
+                                .size)
+                    }
                 }
             }
         }
@@ -402,22 +411,23 @@ class ReadActivity : BaseActivity() {
             if (mCurrentLineIndex >= mCurrentChapterContent!!.size) {
                 return mCurrentChapterContent!!
             }
-            if (mCurrentLineIndex - mLineNumber >= 0) {
-                return mCurrentChapterContent!!
+
+            when {
+                mCurrentLineIndex - mLineNumber >= 0 -> return mCurrentChapterContent!!
                         .subList(mCurrentLineIndex - mLineNumber, mCurrentLineIndex)
-            } else if (mCurrentLineIndex > 0) {
-                return mCurrentChapterContent!!.subList(0, mLineNumber)
-            } else {
-                if (mPreviousChapterContent == null) {
-                    return ArrayList()
-                }
-                return if (mPreviousChapterContent!!.size > mLineNumber) {
-                    mPreviousChapterContent!!
-                            .subList(mPreviousChapterContent!!.size - mLineNumber,
-                                    mPreviousChapterContent!!.size)
-                } else {
-                    mPreviousChapterContent!!.subList(0,
-                            mPreviousChapterContent!!.size)
+                mCurrentLineIndex > 0 -> return mCurrentChapterContent!!.subList(0, mLineNumber - 1)
+                else -> {
+                    if (mPreviousChapterContent == null) {
+                        return ArrayList()
+                    }
+
+                    var startIndex: Int = 0
+                    if (mPreviousChapterContent!!.size > mLineNumber - 1) {
+                        val pageNum = (mPreviousChapterContent!!.size + 1) / mLineNumber
+                        startIndex = if ((mPreviousChapterContent!!.size + 1) % mLineNumber == 0) { (pageNum - 1) * mLineNumber - 1 } else { pageNum * mLineNumber - 1 }
+                    }
+
+                    return mPreviousChapterContent!!.subList(startIndex, mPreviousChapterContent!!.size)
                 }
             }
         }
@@ -461,7 +471,7 @@ class ReadActivity : BaseActivity() {
                     if (text == null || text.isEmpty()) {
                         BookManager.instance.downloadChapterContent(mBook, nextChapter)
                     } else {
-                        setNextChapterContent(text)
+                        setNextChapterContent(if (nextChapter.title.isNullOrEmpty()) { "第${nextChapter.id + 1}章" } else { nextChapter.title!! } , text)
                     }
                 }
             }
@@ -470,7 +480,14 @@ class ReadActivity : BaseActivity() {
 
         override fun computePrevious() {
             if (mCurrentLineIndex == 0) {
-                mCurrentLineIndex = mPreviousChapterContent!!.size - mLineNumber
+
+                mCurrentLineIndex = if (mPreviousChapterContent!!.size > mLineNumber - 1) {
+                    val pageNum = (mPreviousChapterContent!!.size + 1) / mLineNumber
+                    if ((mPreviousChapterContent!!.size + 1) % mLineNumber == 0) { (pageNum - 1) * mLineNumber - 1 } else { pageNum * mLineNumber - 1 }
+                } else {
+                    0
+                }
+
                 mChapterIndex--
                 mNextChapterContent = mCurrentChapterContent
                 mCurrentChapterContent = mPreviousChapterContent
@@ -482,7 +499,7 @@ class ReadActivity : BaseActivity() {
                     if (text == null || text.isEmpty()) {
                         BookManager.instance.downloadChapterContent(mBook, prevChapter)
                     } else {
-                        setPreviousChapterContent(text)
+                        setPreviousChapterContent(if (prevChapter.title.isNullOrEmpty()) { "第${prevChapter.id + 1}章" } else { prevChapter.title!! } , text)
                     }
                 }
             } else {
@@ -534,15 +551,33 @@ class ReadActivity : BaseActivity() {
             BookManager.instance.paint = mReadView.paint
         }
 
+        fun refreshTypeface() {
+            if (mNovel.fontType == 0) {
+                mReadView.typeface = Typeface.DEFAULT
+            } else {
+                val typeface = Typeface.createFromAsset(assets, "fonts/kai.ttf")
+                mReadView.typeface = typeface
+            }
+            reloadData()
+        }
+
         fun updateFooterBar() {
             if (mChapters == null) {
                 mProgressLabel.text = "0%%"
             } else {
                 var progress:Float = mChapterIndex.toFloat() * 100 / mChapters!!
                         .count()
+
                 mCurrentChapterContent?.let {
-                    progress += mCurrentLineIndex.toFloat() * 100 / mChapters!!
-                            .count() / mCurrentChapterContent!!.count()
+                    if (progress < 50) {
+                        progress += mCurrentLineIndex.toFloat() * 100 / mChapters!!
+                                .count() / mCurrentChapterContent!!.count()
+                    } else {
+                        progress += (mCurrentLineIndex + mLineNumber).toFloat() * 100 / mChapters!!.count() / mCurrentChapterContent!!.count()
+                    }
+                }
+                if (progress > 100) {
+                    progress = 100f
                 }
                 mProgressLabel.text = "%.2f%%".format(progress)
             }
@@ -573,8 +608,9 @@ class ReadActivity : BaseActivity() {
         }
 
         fun updateData(content: List<String>) {
-            mTextView.text = StringUtil.join(content, "\n")
+            mTextView.text = Html.fromHtml(StringUtil.join(content, "<br/>"))
             mTextView.textSize = mNovel.readTextSize.toFloat()
+            mTextView.typeface = mNovel.fontFace
             if (mLineNumber == DEFAULT_LINE_NUMBER && mTextView.height > 0) {
                 mLineNumber = (mTextView.height - mTextView.paddingTop -
                         mTextView.paddingBottom) / mTextView.lineHeight

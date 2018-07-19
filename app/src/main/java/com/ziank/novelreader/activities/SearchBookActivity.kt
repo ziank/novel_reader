@@ -55,7 +55,7 @@ class SearchBookActivity:BaseActivity() {
 
         mSearchResultAdapter = BooklistAdapter(this)
         mSearchResultView.adapter = mSearchResultAdapter
-        mSearchResultView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, pos, id ->
+        mSearchResultView.onItemClickListener = AdapterView.OnItemClickListener { _, _, pos, _ ->
             val book = mSearchResultAdapter.getItem(pos)
             val intent = Intent(this, BookPageActivity::class.java)
             intent.putExtra(Constants.BOOK, book)

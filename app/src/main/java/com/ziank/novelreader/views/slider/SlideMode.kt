@@ -10,3 +10,10 @@ class SlideMode {
         val PageMode = 1
     }
 }
+
+class FontType {
+    companion object {
+        val Normal = 0
+        val Kaiti = 1
+    }
+}

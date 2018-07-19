@@ -36,4 +36,7 @@
     <string name="rank_all">点击总排行</string>
     <string name="rank_month">点击月排行</string>
     <string name="rank_week">点击周排行</string>
+    <string name="font_normal">常规</string>
+    <string name="font_kaiti">楷体</string>
+    <string name="back_press_again">再次点击返回退出应用</string>
 </resources>

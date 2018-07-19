@@ -4,6 +4,7 @@ import android.databinding.BaseObservable
 import android.databinding.Bindable
 import com.ziank.novelreader.R
 import com.ziank.novelreader.application.NovelApplication
+import com.ziank.novelreader.views.slider.FontType
 import com.ziank.novelreader.views.slider.SlideMode
 
 /**
@@ -31,6 +32,9 @@ class ReadSettingViewModel(novel: NovelApplication):BaseObservable() {
 
     @Bindable
     var slideMode:Int = novel.getSlideMode()
+
+    @Bindable
+    var fontType:Int = novel.fontType
 
     var backgroundResourceId:Int = novel.backgroundResource
 

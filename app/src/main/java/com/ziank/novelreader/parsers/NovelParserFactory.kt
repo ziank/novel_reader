@@ -15,7 +15,7 @@ class NovelParserFactory private constructor() {
     init {
         mParserList = ArrayList()
         mParserList.add(QududuParser())
-        mParserList.add(SanjianggeParser())
+//        mParserList.add(SanjianggeParser())
     }
 
     fun getParser(book: Book): NovelParser? {

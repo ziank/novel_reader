@@ -2,6 +2,7 @@ package com.ziank.novelreader.application
 
 import android.app.Application
 import android.content.SharedPreferences
+import android.graphics.Typeface
 import android.preference.PreferenceManager
 import com.ziank.novelreader.R
 import com.ziank.novelreader.views.slider.SlideMode
@@ -46,6 +47,17 @@ class NovelApplication : Application() {
                 else -> R.color.text_dark_grey
             }
         }
+    var fontType: Int
+        get() = mPreference.getInt(kFontType, 0)
+        set(type) = mPreference.edit().putInt(kFontType, type).apply()
+
+    val fontFace: Typeface
+        get() {
+            return when (fontType) {
+                1 -> Typeface.createFromAsset(assets, "fonts/kai.ttf")
+                else -> Typeface.DEFAULT
+            }
+        }
 
     fun getSlideMode(): Int {
         return mPreference.getInt(kReadSlideMode, SlideMode.PageMode)
@@ -60,5 +72,6 @@ class NovelApplication : Application() {
         val kReadSize = "read_size"
         val kReadBackgroundResource = "read_bg_resource"
         val kReadSlideMode = "slide_mode"
+        val kFontType = "font_type"
     }
 }
