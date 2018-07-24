@@ -391,7 +391,7 @@ class ReadActivity : BaseActivity() {
             when {
                 nextIndex + mLineNumber < mCurrentChapterContent!!.size -> return mCurrentChapterContent!!
                         .subList(nextIndex, nextIndex + mLineNumber)
-                nextIndex < mCurrentChapterContent!!.size - 1 -> return mCurrentChapterContent!!
+                nextIndex < mCurrentChapterContent!!.size -> return mCurrentChapterContent!!
                         .subList(nextIndex, mCurrentChapterContent!!.size)
                 else -> {
                     if (mNextChapterContent == null) {

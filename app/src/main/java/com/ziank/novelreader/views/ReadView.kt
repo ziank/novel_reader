@@ -63,6 +63,6 @@ class ReadView : android.support.v7.widget.AppCompatTextView {
 
     override fun getLineCount(): Int {
         val linenum = lineNum
-        return if (linenum == 0) 0 else linenum + 1
+        return if (text.isNullOrEmpty()) 0 else linenum + 1
     }
 }
