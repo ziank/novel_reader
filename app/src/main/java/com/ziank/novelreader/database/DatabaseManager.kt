@@ -39,6 +39,8 @@ class DatabaseManager {
                 .isHasUpdate)
         contentValues.put(DataBaseHelper.BookTable.SORT_TIME,
                 System.currentTimeMillis())
+        contentValues.put(DataBaseHelper.BookTable.BOOK_SOURCE,
+                book.bookSourceName)
         try {
             mDbHelper.writableDatabase.replaceOrThrow(DataBaseHelper
                     .BookTable.TABLE_NAME, null, contentValues)
@@ -102,6 +104,6 @@ class DatabaseManager {
 
     companion object {
         var sharedManager = DatabaseManager()
-        val DATABASE_VERSION = 1
+        val DATABASE_VERSION = 2
     }
 }

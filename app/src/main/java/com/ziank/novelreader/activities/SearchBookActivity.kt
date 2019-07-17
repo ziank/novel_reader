@@ -143,14 +143,16 @@ class SearchBookActivity:BaseActivity() {
         if (event.eventType != NovelEvent.EventTypeSearchResult) {
             return
         }
-        val result = event.eventData as List<Book>
-        if (null == mSearchBookResult) {
-            mSearchBookResult = result.toMutableList()
-        } else {
-            mSearchBookResult!!.addAll(result)
-            mSearchBookResult!!.sortBy {
-                BookManager.instance.getDistanceBetweenString(it.title!!,
-                        mSearchText)
+        if (event.eventData != null) {
+            val result = event.eventData as List<Book>
+            if (null == mSearchBookResult) {
+                mSearchBookResult = result.toMutableList()
+            } else {
+                mSearchBookResult!!.addAll(result)
+                mSearchBookResult!!.sortBy {
+                    BookManager.instance.getDistanceBetweenString(it.title!!,
+                            mSearchText)
+                }
             }
         }
         hideProgressHud()

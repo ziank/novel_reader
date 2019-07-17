@@ -34,6 +34,7 @@ SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, dbName,
             val READ_POS = "read_pos"
             val HAS_UPDATE = "has_update"
             val SORT_TIME = "sort_time"
+            val BOOK_SOURCE = "source"
             val SORT_TIME_DEF = "sort_time LONG DEFAULT 0 NOT NULL"
 
             val CREATE_TABLE_SQL = CREATE_TABLE +
@@ -45,6 +46,7 @@ SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, dbName,
                     BOOK_UPDATE + " TEXT, " +
                     BOOK_COVER + " VARCHAR(1024), " +
                     BOOK_SUMMARY + " TEXT" + ", " +
+                    BOOK_SOURCE + " TEXT" + ", " +
                     CHAPTER_INDEX + " INT DEFAULT 0 NOT NULL, " +
                     READ_POS + " INT DEFAULT 0 NOT NULL, " +
                     HAS_UPDATE + " BOOLEAN DEFAULT FALSE NOT NULL, " +

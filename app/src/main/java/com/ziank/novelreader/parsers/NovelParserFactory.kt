@@ -14,41 +14,34 @@ class NovelParserFactory private constructor() {
 
     init {
         mParserList = ArrayList()
-        mParserList.add(QududuParser())
-//        mParserList.add(SanjianggeParser())
+        mParserList.add(BiqulaParser())
+        mParserList.add(DingdianParser())
     }
 
     fun getParser(book: Book): NovelParser? {
         for (parser in mParserList) {
-            val identifier = parser.hostIdentifier.toLowerCase()
-            if (book.bookUrl.toLowerCase().contains(identifier)) {
+            val identifier = parser.name.toLowerCase()
+            if (book.bookSourceName == identifier) {
                 return parser
             }
         }
         return null
     }
 
-    fun getParser(url: String): NovelParser? {
+    fun getParser(host: String): NovelParser? {
         for (parser in mParserList) {
-            val identifier = parser.hostIdentifier.toLowerCase()
-            if (url.toLowerCase().contains(identifier)) {
+            val searchUrl = parser.getSearchBookUrl("").toLowerCase()
+            if (searchUrl.toLowerCase().contains(host)) {
                 return parser
-            }
-        }
-        if (url.toLowerCase().contains("7818637081234473025")) {
-            for (parser in mParserList) {
-                if (parser is SanjianggeParser) {
-                    return parser
-                }
             }
         }
 
         return null
     }
 
-    fun getSearchBookUrlList(bookName: String): List<String> = mParserList
-            .map { it.getSearchBookUrl(bookName) }
-            .filter { it.isNotEmpty() }
+    fun getParserList(): List<NovelParser> {
+        return mParserList
+    }
 
     companion object {
         private var sParserFactory: NovelParserFactory? = null

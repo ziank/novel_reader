@@ -15,12 +15,15 @@
         android:layout_height="match_parent">
 
 
-        <ImageView
-            android:layout_width="75dp"
+        <TextView
+            android:layout_width="100dp"
             android:layout_height="50dp"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            app:imageSrc="@{book.bookResourceId}"/>
+            android:textColor="@color/colorAccent"
+            android:rotation="-30"
+            android:textSize="25sp"
+            android:text="@{book.bookSourceName}"/>
 
         <ImageView
             android:id="@+id/book_cover"

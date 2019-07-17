@@ -18,6 +18,7 @@ import org.greenrobot.eventbus.EventBus
 import org.json.JSONArray
 import org.json.JSONException
 import java.io.*
+import java.net.URL
 import java.security.MessageDigest
 import java.util.*
 
@@ -87,23 +88,26 @@ class BookManager private constructor() {
             return
         }
         for (book in bookList) {
-            downloadChapterList(book)
+            try {
+                downloadChapterList(book)
+            } catch (e:Exception) {}
+            finally {
+            }
         }
     }
 
     fun searchBook(bookname: String) {
-        val urlList = NovelParserFactory.instance
-                .getSearchBookUrlList(bookname)
-        if (urlList.isEmpty()) {
+        val parseList = NovelParserFactory.instance
+                .getParserList()
+        if (parseList.isEmpty()) {
             return
         }
-        for (url in urlList) {
+        for (parser in parseList) {
             NetworkManager.sharedManager.getHttpRequest(
-                    url,
+                    parser.getSearchBookUrl(bookname),
                     object : NetworkCallback<String> {
                         override fun success(response: String) {
-                            val result = NovelParserFactory.instance
-                                    .getParser(url)!!.parseBookList(response)
+                            val result = parser.parseBookList(response)
                             val event = NovelEvent(NovelEvent
                                     .EventTypeSearchResult, result)
                             EventBus.getDefault().post(event)
@@ -111,7 +115,7 @@ class BookManager private constructor() {
 
                         override fun fail(errorMessage: String?) {
                             val event = NovelEvent(NovelEvent
-                                    .EventTypeSearchResult, null)
+                                    .EventTypeSearchResult, ArrayList<Book>())
                             EventBus.getDefault().post(event)
                         }
                     })

@@ -14,6 +14,10 @@ import okhttp3.Callback
 import okhttp3.OkHttpClient
 import okhttp3.Request
 import okhttp3.Response
+import java.lang.Exception
+import java.security.SecureRandom
+import java.security.cert.X509Certificate
+import javax.net.ssl.*
 
 /**
 * Created by ziank on 2017/9/26.
@@ -21,11 +25,47 @@ import okhttp3.Response
 */
 
 class NetworkManager private constructor() {
-    private val mHttpClient = OkHttpClient.Builder()
-            .followRedirects(true).followSslRedirects(true).build()
+    private var mHttpClient: OkHttpClient
 
     init {
+        val ssfFactory: SSLSocketFactory
+        try {
+            val sc = SSLContext.getInstance("TLS")
+            sc.init(null, arrayOf(TrustAllCerts()), SecureRandom())
+            ssfFactory = sc.socketFactory
+            mHttpClient = OkHttpClient.Builder()
+                    .sslSocketFactory(ssfFactory)
+                    .followRedirects(true)
+                    .followSslRedirects(true)
+                    .build()
+        } catch (e: Exception) {
+            mHttpClient = OkHttpClient.Builder()
+                    .followRedirects(true)
+                    .followSslRedirects(true)
+                    .build()
+        }
+
+
+
         mHttpClient.dispatcher().maxRequestsPerHost = 5
+    }
+
+    private class TrustAllCerts: X509TrustManager {
+        override fun checkClientTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+        }
+
+        override fun checkServerTrusted(chain: Array<out X509Certificate>?, authType: String?) {
+        }
+
+        override fun getAcceptedIssuers(): Array<X509Certificate?> {
+            return arrayOfNulls<X509Certificate>(0)
+        }
+
+    }
+    private class TrustAllHostnameVerifier: HostnameVerifier {
+        override fun verify(hostname: String?, session: SSLSession?): Boolean {
+            return true
+        }
     }
 
     fun getHttpRequest(urlString: String, networkCallback: NetworkCallback<String>) {

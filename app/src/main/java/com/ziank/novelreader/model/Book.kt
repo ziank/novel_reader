@@ -36,8 +36,7 @@ class Book : Serializable {
     val bookId: Long
         get() = bookUrl.hashCode().toLong()
 
-    val bookResourceId: Int
-        get() = NovelParserFactory.instance.getParser(bookUrl)!!.resourceId
+    var bookSourceName: String = ""
 
     constructor(title: String, author: String, bookUrl: String, updateContent: String) {
         bookCode = BookManager.instance.getMd5(bookUrl)
@@ -83,7 +82,8 @@ class Book : Serializable {
                     .READ_POS)
             book.isHasUpdate = helper.getBoolean(DataBaseHelper.BookTable
                     .HAS_UPDATE)
-            book.bookUrl = book.bookUrl//.replace("qududu.org", "qududu.net")
+            book.bookSourceName = helper.getString(DataBaseHelper.BookTable.BOOK_SOURCE)
+                    book.bookUrl = book.bookUrl//.replace("qududu.org", "qududu.net")
             book.bookCoverUrl = book.bookCoverUrl//.replace("qududu.org","qududu.net")
             return book
         }

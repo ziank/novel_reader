@@ -69,6 +69,20 @@ class BookMenuListActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Array
                 startActivity(intent)
             }
         }
+        mMenuListView.onItemLongClickListener = AdapterView.OnItemLongClickListener { _, _, pos, _ ->
+            val chapterList = mChapterList
+            if (chapterList == null) {
+                return@OnItemLongClickListener false
+            }
+            if (chapterList.size <= pos) {
+                return@OnItemLongClickListener true
+            } else {
+                val chapter = chapterList[pos]
+                BookManager.instance.downloadChapterContent(mBook, chapter)
+                return@OnItemLongClickListener true
+            }
+
+        }
 
         if (mActivityFrom == FROM_CONTENT) {
             val pos = intent.getIntExtra(Constants.CHAPTER_INDEX, 0)

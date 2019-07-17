@@ -29,6 +29,6 @@ class BookItemViewModule(private var mBook: Book) : BaseObservable() {
     val desc: String?
         get() = mBook.summary
 
-    val bookResourceId:Int
-        get() = mBook.bookResourceId
+    val bookSourceName:String
+        get() = mBook.bookSourceName
 }

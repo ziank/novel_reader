@@ -18,6 +18,9 @@ class MyComponent:DataBindingComponent {
 
     @BindingAdapter("imageUrl")
     fun loadImage(view: ImageView, imageUrl: String) {
+        if (imageUrl.isEmpty()) {
+            return
+        }
         Picasso.with(view.context)
                 .load(imageUrl)
                 .placeholder(R.drawable.booklist)
