@@ -3,8 +3,6 @@ package com.ziank.novelreader.views
 import android.content.Context
 import android.support.v4.content.ContextCompat
 import android.util.AttributeSet
-import android.widget.TextView
-
 import com.ziank.novelreader.R
 
 /**
@@ -18,11 +16,11 @@ class TabbarItemView : android.support.v7.widget.AppCompatTextView {
     private var mHoverDrawableId: Int = 0
 
 
-    constructor(context: Context) : super(context) {}
+    constructor(context: Context) : super(context)
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {}
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {}
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     fun initTabs(textId: Int, drawableId: Int, hoverDrawableId: Int) {
         mTextId = textId

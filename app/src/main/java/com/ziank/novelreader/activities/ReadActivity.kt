@@ -391,7 +391,7 @@ class ReadActivity : BaseActivity() {
             when {
                 nextIndex + mLineNumber < mCurrentChapterContent!!.size -> return mCurrentChapterContent!!
                         .subList(nextIndex, nextIndex + mLineNumber)
-                nextIndex < mCurrentChapterContent!!.size - 1 -> return mCurrentChapterContent!!
+                nextIndex <= mCurrentChapterContent!!.size - 1 -> return mCurrentChapterContent!!
                         .subList(nextIndex, mCurrentChapterContent!!.size)
                 else -> {
                     if (mNextChapterContent == null) {
@@ -451,7 +451,7 @@ class ReadActivity : BaseActivity() {
 
         override fun computeNext() {
             val readView = currentView.findViewById<View>(R.id.text_content) as ReadView
-            if (mCurrentLineIndex + readView.lineCount < mCurrentChapterContent!!
+            if (mCurrentLineIndex + readView.lineCount <= mCurrentChapterContent!!
                     .size - 1) {
                 mCurrentLineIndex += readView.lineCount
                 mCurrentCharIndex += readView.charCount

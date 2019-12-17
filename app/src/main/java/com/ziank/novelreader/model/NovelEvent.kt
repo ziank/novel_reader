@@ -8,16 +8,16 @@ package com.ziank.novelreader.model
 class NovelEvent(var eventType: Int,
                  var eventData: Any?) {
     companion object {
-        val EventTypeFavoriteChanged = 0
-        val EventTypeLastUpdateChanged = EventTypeFavoriteChanged + 1
-        val EventTypeSearchResult = EventTypeLastUpdateChanged + 1
-        val EventTypeFetchChapterList = EventTypeSearchResult + 1
-        val EventTypeFetchChapterContent = EventTypeFetchChapterList + 1
-        val EventTypeRefreshBookList = EventTypeFetchChapterContent + 1
-        val EventTypeChangeReadBg: Int = EventTypeRefreshBookList + 1
-        val EventTypeChangeSlideMode: Int = EventTypeChangeReadBg + 1
-        val EventTypeChangeFontSize: Int = EventTypeChangeSlideMode + 1
-        val EventTypeSuggestResult: Int = EventTypeChangeFontSize + 1
-        val EventtypeChangeFontTypeface: Int = EventTypeSuggestResult + 1
+        const val EventTypeFavoriteChanged = 0
+        const val EventTypeLastUpdateChanged = EventTypeFavoriteChanged + 1
+        const val EventTypeSearchResult = EventTypeLastUpdateChanged + 1
+        const val EventTypeFetchChapterList = EventTypeSearchResult + 1
+        const val EventTypeFetchChapterContent = EventTypeFetchChapterList + 1
+        const val EventTypeRefreshBookList = EventTypeFetchChapterContent + 1
+        const val EventTypeChangeReadBg: Int = EventTypeRefreshBookList + 1
+        const val EventTypeChangeSlideMode: Int = EventTypeChangeReadBg + 1
+        const val EventTypeChangeFontSize: Int = EventTypeChangeSlideMode + 1
+        const val EventTypeSuggestResult: Int = EventTypeChangeFontSize + 1
+        const val EventtypeChangeFontTypeface: Int = EventTypeSuggestResult + 1
     }
 }

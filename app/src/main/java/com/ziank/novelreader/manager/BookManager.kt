@@ -34,8 +34,8 @@ enum class BookSuggestType {
     SuggestTypeRankMonth,
     SuggestTypeRankAll,
 }
-class SuggestBookListResult(var suggestType:BookSuggestType,
-                            var bookList:List<Book>) {
+
+class SuggestBookListResult(var bookList: List<Book>) {
 }
 
 class BookManager private constructor() {
@@ -47,11 +47,11 @@ class BookManager private constructor() {
             val novelPath = NovelApplication.instance
                     .getExternalFilesDir("novel")!!.absolutePath
             val file = File(novelPath)
-            if (file.exists() && file.isDirectory) {
-                return novelPath
+            return if (file.exists() && file.isDirectory) {
+                novelPath
             } else {
                 file.mkdir()
-                return novelPath
+                novelPath
             }
         }
 
@@ -121,15 +121,14 @@ class BookManager private constructor() {
     fun splitTextWithTextSize(title: String, text: String, width: Float): List<String> {
         val resultLines = ArrayList<String>()
         var title = title
-        if (title.length > 8) {
-            title = title.substring(0, 7) + "..."
+        if (title.length > 10) {
+            title = title.substring(0, 10) + "..."
         }
-        resultLines.add("<big><big>$title</big></big>")
-
+        resultLines.add("<big>$title</big>")
         val lines = text.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val count = lines.size
         for (i in 0 until count) {
-            val line = lines[i]
+            val line = lines[i].replace("<.+>".toRegex(), "")
             var startPos = 0
             val endPos = line.length
             val widths = floatArrayOf(0f, 0f)
@@ -149,15 +148,15 @@ class BookManager private constructor() {
     }
 
     fun getMd5(`val`: String): String {
-        try {
+        return try {
             val md5 = MessageDigest.getInstance("MD5")
             md5.update(`val`.toByteArray())
             val m = md5.digest()
-            return getString(m)
+            getString(m)
         } catch (e: Exception) {
             e.printStackTrace()
             val bytes = `val`.toByteArray()
-            return Base64.encodeToString(bytes, bytes.size)
+            Base64.encodeToString(bytes, bytes.size)
         }
 
     }
@@ -224,7 +223,7 @@ class BookManager private constructor() {
     }
 
     private fun writeChapterListToDisk(book: Book, chapterList: List<Chapter>?) {
-        if (null == chapterList || chapterList.size == 0) {
+        if (null == chapterList || chapterList.isEmpty()) {
             return
         }
         val array = JSONArray()
@@ -276,7 +275,7 @@ class BookManager private constructor() {
     private fun writeContentToDisk(book: Book,
                                    chapter: Chapter,
                                    content: String?) {
-        if (null == content || content.length == 0) {
+        if (null == content || content.isEmpty()) {
             return
         }
 
@@ -396,24 +395,23 @@ class BookManager private constructor() {
     }
 
     companion object {
-        private val DOWNLOAD_BOOK = Integer.MAX_VALUE
+        private const val DOWNLOAD_BOOK = Integer.MAX_VALUE
         val instance = BookManager()
     }
 
-    fun fetchSuggestBookList(suggestType: BookSuggestType) {
+    private fun fetchSuggestBookList(suggestType: BookSuggestType) {
         val urlString = mSuggestParser.getSuggestUrl(suggestType)
         NetworkManager.sharedManager.getHttpRequest(urlString, object:
                 NetworkCallback<String> {
             override fun success(response: String) {
                 val result = mSuggestParser.parseBookList(response, urlString)
-                val suggestResult = SuggestBookListResult(suggestType, result)
+                val suggestResult = SuggestBookListResult(result)
                 val event = NovelEvent(NovelEvent.EventTypeSuggestResult, suggestResult)
                 EventBus.getDefault().post(event)
             }
 
             override fun fail(errorMessage: String?) {
-                val suggestResult = SuggestBookListResult(BookSuggestType
-                        .SuggestTypeDefault, ArrayList<Book>())
+                val suggestResult = SuggestBookListResult(ArrayList())
                 val event = NovelEvent(NovelEvent.EventTypeSuggestResult, suggestResult)
                 EventBus.getDefault().post(event)
             }
@@ -421,16 +419,12 @@ class BookManager private constructor() {
         })
     }
 
-    fun fetchDefaultSuggestBook() {
-        fetchSuggestBookList(BookSuggestType.SuggestTypeDefault)
-    }
-
     fun fetchRankWeekBookList() {
         fetchSuggestBookList(BookSuggestType.SuggestTypeRankWeek)
     }
 
     fun fetchRankMonthBookList() {
-        fetchSuggestBookList(BookSuggestType.SuggestTypeRankMonth)
+        this.fetchSuggestBookList(BookSuggestType.SuggestTypeRankMonth)
     }
 
     fun fetchRankAllBookList() {
@@ -457,8 +451,7 @@ class BookManager private constructor() {
     fun getDistanceBetweenString(s1: String, s2: String) :Int {
         val nLenA = s1.length
         val nLenB = s2.length
-        val matrix:Array<Array<Int>> = Array<Array<Int>>(nLenA + 1,
-                { Array<Int>(nLenB + 1, { 0 }) })
+        val matrix:Array<Array<Int>> = Array(nLenA + 1) { Array(nLenB + 1) { 0 } }
 
         matrix[0][0] = 0
 
@@ -471,12 +464,12 @@ class BookManager private constructor() {
 
         for (j in 1 until nLenA + 1) {
             for (k in 1 until nLenB + 1) {
-                var Fjk = 0
+                var fjk = 0
                 if (s1[j - 1] != s2[k - 1]) {
-                    Fjk = 1
+                    fjk = 1
                 }
                 matrix[j][k] = min3Value(matrix[j - 1][k] + 1, matrix[j][k -
-                        1] + 1, matrix[j - 1][k - 1] + Fjk)
+                        1] + 1, matrix[j - 1][k - 1] + fjk)
             }
         }
 

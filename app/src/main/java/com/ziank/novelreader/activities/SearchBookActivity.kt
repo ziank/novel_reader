@@ -143,6 +143,11 @@ class SearchBookActivity:BaseActivity() {
         if (event.eventType != NovelEvent.EventTypeSearchResult) {
             return
         }
+        if (event.eventData == null) {
+            hideProgressHud()
+            mSearchResultAdapter.notifyDataSetChanged()
+            return
+        }
         val result = event.eventData as List<Book>
         if (null == mSearchBookResult) {
             mSearchBookResult = result.toMutableList()

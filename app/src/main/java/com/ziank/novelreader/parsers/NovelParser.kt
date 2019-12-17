@@ -12,7 +12,8 @@ import java.util.ArrayList
 
 interface NovelParser {
     val hostIdentifier: String
-    val resourceId:Int
+    val resourceName:String
+    val resourceColor: Int
     fun getSearchBookUrl(bookName: String): String
     fun getDownloadBookUrl(book: Book): String
     fun parseBookList(htmlContent: String): ArrayList<Book>?

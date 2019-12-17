@@ -6,26 +6,26 @@ package com.ziank.novelreader.config
 */
 
 object Constants {
-    val BOOK = "book"
+    const val BOOK = "book"
 
-    val CHAPTER_LIST = "chapter_list"
-    val CHAPTER_INDEX = "chapter_index"
-    val READ_POS = "read_pos"
-    val TITLE = "title"
-    val BOOK_NAME = "book_name"
+    const val CHAPTER_LIST = "chapter_list"
+    const val CHAPTER_INDEX = "chapter_index"
+    const val READ_POS = "read_pos"
+    const val TITLE = "title"
+    const val BOOK_NAME = "book_name"
 
-    val ACTIVITY_FROM = "activity_from"
+    const val ACTIVITY_FROM = "activity_from"
 
     //request code
-    val REQUEST_CODE_BOOK_MENU = 1
-    val REQUEST_CODE_READ_SETTING = 2
-    val REQUEST_CODE_BOOK_PAGE = 3
+    const val REQUEST_CODE_BOOK_MENU = 1
+    const val REQUEST_CODE_READ_SETTING = 2
+    const val REQUEST_CODE_BOOK_PAGE = 3
 
     //result code
-    val RESULT_SELECT_CHAPTER = 1
-    val RESULT_ACTIVITY_FINISH = 2
-    val RESULT_OPEN_CATALOG = 3
-    val RESULT_OPEN_DETAIL = 4
+    const val RESULT_SELECT_CHAPTER = 1
+    const val RESULT_ACTIVITY_FINISH = 2
+    const val RESULT_OPEN_CATALOG = 3
+    const val RESULT_OPEN_DETAIL = 4
 
 
     //public static final String

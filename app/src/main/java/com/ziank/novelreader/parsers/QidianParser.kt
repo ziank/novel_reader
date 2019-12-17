@@ -2,12 +2,9 @@ package com.ziank.novelreader.parsers
 
 import com.ziank.novelreader.manager.BookSuggestType
 import com.ziank.novelreader.model.Book
-import com.ziank.novelreader.model.Chapter
 import org.jsoup.Jsoup
-import org.jsoup.nodes.Element
-import java.net.MalformedURLException
 import java.net.URL
-import java.util.ArrayList
+import java.util.*
 
 /**
 * Created by ziank on 2017/11/6.

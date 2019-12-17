@@ -5,31 +5,23 @@ import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.os.Handler
 import android.app.Fragment
-import android.text.Layout
 import android.view.*
 import android.widget.*
 
 import com.ziank.novelreader.R
-import com.ziank.novelreader.activities.BookPageActivity
 import com.ziank.novelreader.activities.SearchBookActivity
-import com.ziank.novelreader.databinding.SearchBookItemBinding
 import com.ziank.novelreader.manager.BookManager
 import com.ziank.novelreader.model.Book
 
 import com.ziank.novelreader.config.Constants
-import com.ziank.novelreader.databinding.BookItemBinding
 import com.ziank.novelreader.databinding.SuggestBookItemBinding
 import com.ziank.novelreader.databinding.SuggestHeaderViewBinding
-import com.ziank.novelreader.manager.BookSuggestType
 import com.ziank.novelreader.manager.SuggestBookListResult
 import com.ziank.novelreader.model.NovelEvent
 import com.ziank.novelreader.view_models.BookItemViewModule
 import com.ziank.novelreader.view_models.MyComponent
 
-import org.greenrobot.eventbus.Subscribe
-import org.greenrobot.eventbus.ThreadMode
 import java.util.ArrayList
 
 
@@ -38,9 +30,9 @@ import java.util.ArrayList
  */
 class SuggestBooklistFragment : BaseFragment() {
     private lateinit var mSuggestBookListView: ListView
-    var mBookList:List<Book> = ArrayList<Book>()
+    var mBookList:List<Book> = ArrayList()
     private lateinit var mBookListAdapter:SuggestBookListAdapter
-    private var mViewList:ArrayList<TextView> = ArrayList<TextView>()
+    private var mViewList:ArrayList<TextView> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,9 +43,8 @@ class SuggestBooklistFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_suggest_booklist,
+        return inflater.inflate(R.layout.fragment_suggest_booklist,
                 container, false)
-        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
@@ -76,7 +67,7 @@ class SuggestBooklistFragment : BaseFragment() {
                         false, MyComponent())
         val headerView = headerViewBinding.root
         mSuggestBookListView.addHeaderView(headerView, null, false)
-        mSuggestBookListView.setOnItemClickListener { adapterView, view, pos, id ->
+        mSuggestBookListView.setOnItemClickListener { adapterView, _, pos, _ ->
             val book = adapterView.adapter.getItem(pos) as Book
             val intent = Intent(activity, SearchBookActivity::class.java)
             intent.putExtra(Constants.BOOK_NAME, book.title)
@@ -91,7 +82,7 @@ class SuggestBooklistFragment : BaseFragment() {
         }
         mViewList.add(cview)
 
-        cview = view.findViewById<TextView>(R.id.rank_month)
+        cview = view.findViewById(R.id.rank_month)
         cview.setOnClickListener {
             BookManager.instance.fetchRankMonthBookList()
             showProgressHud()
@@ -99,7 +90,7 @@ class SuggestBooklistFragment : BaseFragment() {
         }
         mViewList.add(cview)
 
-        cview = view.findViewById<TextView>(R.id.rank_all)
+        cview = view.findViewById(R.id.rank_all)
         cview.setOnClickListener {
             BookManager.instance.fetchRankAllBookList()
             showProgressHud()
@@ -107,7 +98,7 @@ class SuggestBooklistFragment : BaseFragment() {
         }
         mViewList.add(cview)
 
-        cview = view.findViewById<TextView>(R.id.advise_all)
+        cview = view.findViewById(R.id.advise_all)
         cview.setOnClickListener {
             BookManager.instance.fetchAdviseAllBookList()
             showProgressHud()
@@ -115,7 +106,7 @@ class SuggestBooklistFragment : BaseFragment() {
         }
         mViewList.add(cview)
 
-        cview = view.findViewById<TextView>(R.id.advise_month)
+        cview = view.findViewById(R.id.advise_month)
         cview.setOnClickListener {
             BookManager.instance.fetchAdviseMonthBookList()
             showProgressHud()
@@ -123,7 +114,7 @@ class SuggestBooklistFragment : BaseFragment() {
         }
         mViewList.add(cview)
 
-        cview = view.findViewById<TextView>(R.id.advise_week)
+        cview = view.findViewById(R.id.advise_week)
         cview.setOnClickListener {
             BookManager.instance.fetchAdviseWeekBookList()
             showProgressHud()

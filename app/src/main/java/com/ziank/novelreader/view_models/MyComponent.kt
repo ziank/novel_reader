@@ -2,7 +2,9 @@ package com.ziank.novelreader.view_models
 
 import android.databinding.BindingAdapter
 import android.databinding.DataBindingComponent
+import android.support.v4.content.ContextCompat
 import android.widget.ImageView
+import android.widget.TextView
 import com.squareup.picasso.Picasso
 import com.ziank.novelreader.R
 import com.ziank.novelreader.views.ReadBackgroundShowView
@@ -18,10 +20,12 @@ class MyComponent:DataBindingComponent {
 
     @BindingAdapter("imageUrl")
     fun loadImage(view: ImageView, imageUrl: String) {
-        Picasso.with(view.context)
-                .load(imageUrl)
-                .placeholder(R.drawable.booklist)
-                .into(view)
+        if (!imageUrl.isEmpty()) {
+            Picasso.with(view.context)
+                    .load(imageUrl)
+                    .placeholder(R.drawable.booklist)
+                    .into(view)
+        }
     }
 
     @BindingAdapter("select")
@@ -33,5 +37,10 @@ class MyComponent:DataBindingComponent {
     @BindingAdapter("imageSrc")
     fun loadImage(view: ImageView, imageSrc: Int) {
         view.setImageResource(imageSrc)
+    }
+
+    @BindingAdapter("resourceColor")
+    fun setIconColor(view: TextView, resourceColor: Int) {
+        view.setTextColor(ContextCompat.getColor(view.context, resourceColor))
     }
 }

@@ -16,4 +16,7 @@
     <color name="transparent">#00000000</color>
     <color name="search_transparent">#33000000</color>
     <color name="listview_bgcolor">#F4F4F4</color>
+
+    <color name="biquwo_icon">#6100E1FF</color>
+    <color name="biqula_icon">#61FF0000</color>
 </resources>

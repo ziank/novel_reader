@@ -89,19 +89,18 @@ class DatabaseManager {
                 .BookTable.TABLE_NAME, null, null, null, null, null,
                 DataBaseHelper.BookTable.SORT_TIME + " DESC", null)
         val result = ArrayList<Book>()
-        try {
+
+        cursor.use { cursor ->
             while (cursor.moveToNext()) {
                 val book = Book.fromCursor(cursor)
                 result.add(book)
             }
-        } finally {
-            cursor.close()
         }
         return result
     }
 
     companion object {
         var sharedManager = DatabaseManager()
-        val DATABASE_VERSION = 1
+        const val DATABASE_VERSION = 1
     }
 }

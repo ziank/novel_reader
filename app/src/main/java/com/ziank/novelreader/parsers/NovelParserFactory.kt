@@ -14,8 +14,8 @@ class NovelParserFactory private constructor() {
 
     init {
         mParserList = ArrayList()
-        mParserList.add(QududuParser())
-//        mParserList.add(SanjianggeParser())
+        mParserList.add(BiquwoParser())
+        mParserList.add(BiqulaParser())
     }
 
     fun getParser(book: Book): NovelParser? {
@@ -35,9 +35,9 @@ class NovelParserFactory private constructor() {
                 return parser
             }
         }
-        if (url.toLowerCase().contains("7818637081234473025")) {
+        if (url.toLowerCase().contains("qula")) {
             for (parser in mParserList) {
-                if (parser is SanjianggeParser) {
+                if (parser is BiqulaParser) {
                     return parser
                 }
             }

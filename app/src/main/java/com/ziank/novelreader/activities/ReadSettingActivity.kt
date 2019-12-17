@@ -3,7 +3,6 @@ package com.ziank.novelreader.activities
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.Toolbar
-import android.transition.Slide
 import android.view.MenuItem
 import android.view.View
 import android.view.animation.AnimationUtils
@@ -11,7 +10,6 @@ import android.widget.TextView
 import com.ziank.novelreader.BR
 import com.ziank.novelreader.R
 import com.ziank.novelreader.config.Constants
-import com.ziank.novelreader.databinding.ActivityBookPageBinding
 import com.ziank.novelreader.databinding.ActivityReadSettingBinding
 import com.ziank.novelreader.model.NovelEvent
 import com.ziank.novelreader.view_models.MyComponent

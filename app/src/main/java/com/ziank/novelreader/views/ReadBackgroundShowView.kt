@@ -16,9 +16,9 @@ import com.ziank.novelreader.R
 * @copyright ziank.2018
 */
 class ReadBackgroundShowView :AppCompatImageView {
-    constructor(context: Context) : super(context) {}
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {}
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {}
+    constructor(context: Context) : super(context)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
 
     var chosen: Boolean = false
     private val paint: Paint = Paint()

@@ -1,14 +1,10 @@
 package com.ziank.novelreader.model
 
 import android.database.Cursor
-import android.databinding.Bindable
-import com.ziank.novelreader.R
-
 import com.ziank.novelreader.database.CursorHelper
 import com.ziank.novelreader.database.DataBaseHelper
 import com.ziank.novelreader.manager.BookManager
 import com.ziank.novelreader.parsers.NovelParserFactory
-
 import java.io.Serializable
 
 /**
@@ -36,8 +32,11 @@ class Book : Serializable {
     val bookId: Long
         get() = bookUrl.hashCode().toLong()
 
-    val bookResourceId: Int
-        get() = NovelParserFactory.instance.getParser(bookUrl)!!.resourceId
+    val resourceName: String
+        get() = NovelParserFactory.instance.getParser(bookUrl)!!.resourceName
+
+    val resourceColor: Int
+        get() = NovelParserFactory.instance.getParser(bookUrl)!!.resourceColor
 
     constructor(title: String, author: String, bookUrl: String, updateContent: String) {
         bookCode = BookManager.instance.getMd5(bookUrl)
@@ -45,9 +44,11 @@ class Book : Serializable {
         this.author = author
         this.bookUrl = bookUrl
         this.updateContent = updateContent
+        this.bookCoverUrl = ""
+        this.summary = ""
     }
 
-    private constructor() {}
+    private constructor()
 
     fun equalsToBook(obj: Any): Boolean {
         if (obj is Book) {

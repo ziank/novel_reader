@@ -10,12 +10,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
-        <ImageView
+        <!--<ImageView-->
+            <!--android:layout_width="75dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:layout_centerVertical="true"-->
+            <!--android:layout_alignParentEnd="true"-->
+            <!--app:imageSrc="@{book.resourceName}"/>-->
+        <TextView
             android:layout_width="75dp"
             android:layout_height="50dp"
             android:layout_centerVertical="true"
             android:layout_alignParentEnd="true"
-            app:imageSrc="@{book.bookResourceId}"/>
+            android:rotation="-30"
+            app:resourceColor="@{book.resourceColor}"
+            android:textSize="20sp"
+            android:text="@{book.resourceName}"/>
 
         <LinearLayout
             android:id="@+id/title_content"
