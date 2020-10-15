@@ -33,7 +33,7 @@ class ReadView : android.support.v7.widget.AppCompatTextView {
     val lineNum: Int
         get() {
             val layout = layout ?: return 0
-            val topOfLastLine = height - paddingTop - paddingBottom - lineHeight
+            val topOfLastLine = height - paddingTop - paddingBottom
             return layout.getLineForVertical(topOfLastLine)
         }
 

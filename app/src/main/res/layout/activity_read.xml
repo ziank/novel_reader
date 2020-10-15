@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -12,10 +11,6 @@
         android:id="@+id/sliding_container"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="0dp"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="0dp"
-        android:layout_marginTop="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
@@ -23,26 +18,34 @@
 
     </com.ziank.novelreader.views.slider.SlidingLayout>
 
-    <TextView
-        android:id="@+id/chapter_title"
-        android:layout_width="match_parent"
-        android:layout_height="24dp"
-        android:gravity="center_vertical"
-        android:paddingEnd="15dp"
-        android:paddingStart="15dp"
-        android:textColor="@color/border_color"
-        android:textSize="12sp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="parent"/>
-
     <RelativeLayout
-        android:id="@+id/footer_bar"
+        android:id="@+id/header_bar"
         android:layout_width="match_parent"
         android:layout_height="20dp"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent">
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <TextView
+            android:id="@+id/chapter_title"
+            android:layout_width="match_parent"
+            android:layout_height="24dp"
+            android:layout_alignParentStart="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="80dp"
+            android:gravity="center_vertical"
+            android:paddingStart="15dp"
+            android:paddingEnd="0dp"
+            android:textColor="@color/border_color"
+            android:textSize="12sp" />
+
+
+        <TextView
+            android:id="@+id/footer_bar_time"
+            android:layout_width="50dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true" />
 
         <ProgressBar
             android:id="@+id/footer_bar_battery"
@@ -51,25 +54,35 @@
             android:layout_height="14dp"
             android:layout_centerVertical="true"
             android:layout_marginStart="10dp"
+            android:layout_toStartOf="@id/footer_bar_time"
             android:background="@drawable/battery_bg9"
             android:max="100"
             android:progress="40"
-            android:progressDrawable="@drawable/seekbar_battery_bg"/>
+            android:progressDrawable="@drawable/seekbar_battery_bg" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/footer_bar"
+        android:layout_width="match_parent"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent">
         <TextView
-            android:id="@+id/footer_bar_time"
+            android:id="@+id/footer_bar_page"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_toEndOf="@id/footer_bar_battery" />
-
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="20dp"
+            android:layout_centerVertical="true" />
         <TextView
             android:id="@+id/footer_bar_progress"
             android:layout_width="50dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="10dp"
-            android:textAlignment="textEnd"
             android:layout_alignParentEnd="true"
-            android:layout_centerVertical="true"/>
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="10dp"
+            android:textAlignment="textEnd" />
 
     </RelativeLayout>
 

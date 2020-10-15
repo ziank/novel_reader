@@ -125,10 +125,10 @@ class BookManager private constructor() {
     fun splitTextWithTextSize(title: String, text: String, width: Float): List<String> {
         val resultLines = ArrayList<String>()
         var title = title
-        if (title.length > 8) {
-            title = title.substring(0, 7) + "..."
+        if (title.length > 14) {
+            title = title.substring(0, 13) + "..."
         }
-        resultLines.add("<big><big>$title</big></big>")
+        resultLines.add("<b>$title</b>")
 
         val lines = text.split("\n".toRegex()).dropLastWhile { it.isEmpty() }.toTypedArray()
         val count = lines.size

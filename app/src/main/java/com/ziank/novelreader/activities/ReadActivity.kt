@@ -9,6 +9,7 @@ import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.text.Html
 import android.util.DisplayMetrics
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import android.widget.ProgressBar
@@ -31,6 +32,7 @@ class ReadActivity : BaseActivity() {
     private lateinit var mBatteryView: ProgressBar
     private lateinit var mTimeLabel: TextView
     private lateinit var mProgressLabel: TextView
+    private lateinit var mPageNumView: TextView
 
     private var mBatInfoReceiver: BroadcastReceiver = object:
             BroadcastReceiver() {
@@ -74,6 +76,7 @@ class ReadActivity : BaseActivity() {
         mBatteryView = findViewById(R.id.footer_bar_battery)
         mTimeLabel = findViewById(R.id.footer_bar_time)
         mProgressLabel = findViewById(R.id.footer_bar_progress)
+        mPageNumView = findViewById(R.id.footer_bar_page)
 
         window.setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN)
@@ -373,7 +376,7 @@ class ReadActivity : BaseActivity() {
             if (mCurrentLineIndex >= mCurrentChapterContent!!.size) {
                 return mCurrentChapterContent!!
             }
-            val lineNumber = if (mCurrentLineIndex == 0) { mLineNumber - 1 } else { mLineNumber }
+            val lineNumber = mLineNumber
             return if (mCurrentLineIndex + lineNumber < mCurrentChapterContent!!.size) {
                 mCurrentChapterContent!!
                         .subList(mCurrentLineIndex, mCurrentLineIndex + lineNumber)
@@ -384,10 +387,7 @@ class ReadActivity : BaseActivity() {
         }
 
         override fun getNext(): List<String> {
-            val readView = currentView.findViewById<View>(R.id.text_content) as ReadView
-            val lineCount = readView.lineCount
-
-            val nextIndex = mCurrentLineIndex + lineCount
+            val nextIndex = mCurrentLineIndex + mLineNumber
             when {
                 nextIndex + mLineNumber < mCurrentChapterContent!!.size -> return mCurrentChapterContent!!
                         .subList(nextIndex, nextIndex + mLineNumber)
@@ -398,7 +398,7 @@ class ReadActivity : BaseActivity() {
                         return ArrayList()
                     }
                     return if (mNextChapterContent!!.size > mLineNumber - 1) {
-                        mNextChapterContent!!.subList(0, mLineNumber - 1)
+                        mNextChapterContent!!.subList(0, mLineNumber)
                     } else {
                         mNextChapterContent!!.subList(0, mNextChapterContent!!
                                 .size)
@@ -415,7 +415,7 @@ class ReadActivity : BaseActivity() {
             when {
                 mCurrentLineIndex - mLineNumber >= 0 -> return mCurrentChapterContent!!
                         .subList(mCurrentLineIndex - mLineNumber, mCurrentLineIndex)
-                mCurrentLineIndex > 0 -> return mCurrentChapterContent!!.subList(0, mLineNumber - 1)
+                mCurrentLineIndex > 0 -> return mCurrentChapterContent!!.subList(0, mLineNumber)
                 else -> {
                     if (mPreviousChapterContent == null) {
                         return ArrayList()
@@ -434,7 +434,7 @@ class ReadActivity : BaseActivity() {
 
         override fun hasNext(): Boolean {
             val readView = currentView.findViewById<View>(R.id.text_content) as ReadView
-            if (mCurrentLineIndex + readView.lineCount < mCurrentChapterContent!!
+            if (mCurrentLineIndex + mLineNumber < mCurrentChapterContent!!
                     .size - 1) {
                 return true
             }
@@ -451,9 +451,9 @@ class ReadActivity : BaseActivity() {
 
         override fun computeNext() {
             val readView = currentView.findViewById<View>(R.id.text_content) as ReadView
-            if (mCurrentLineIndex + readView.lineCount <= mCurrentChapterContent!!
+            if (mCurrentLineIndex + mLineNumber <= mCurrentChapterContent!!
                     .size - 1) {
-                mCurrentLineIndex += readView.lineCount
+                mCurrentLineIndex += mLineNumber
                 mCurrentCharIndex += readView.charCount
             } else {
                 mCurrentLineIndex = 0
@@ -558,12 +558,15 @@ class ReadActivity : BaseActivity() {
                 val typeface = Typeface.createFromAsset(assets, "fonts/kai.ttf")
                 mReadView.typeface = typeface
             }
+            mLineNumber = DEFAULT_LINE_NUMBER
             reloadData()
+            BookManager.instance.paint = mReadView.paint
         }
 
         fun updateFooterBar() {
             if (mChapters == null) {
                 mProgressLabel.text = "0%%"
+                mPageNumView.text = "/"
             } else {
                 var progress:Float = mChapterIndex.toFloat() * 100 / mChapters!!
                         .count()
@@ -583,6 +586,11 @@ class ReadActivity : BaseActivity() {
             }
 
             mTimeLabel.text = mDateFormat.format(Date())
+
+            val num = if (mCurrentChapterContent!!.size % mLineNumber == 0) { 0 } else 1
+            val pageNum = mCurrentChapterContent!!.size / mLineNumber + num
+            mPageNumView.text = "${(mCurrentLineIndex + 1) / mLineNumber + 1}/$pageNum"
+
         }
     }
 
@@ -614,6 +622,9 @@ class ReadActivity : BaseActivity() {
             if (mLineNumber == DEFAULT_LINE_NUMBER && mTextView.height > 0) {
                 mLineNumber = (mTextView.height - mTextView.paddingTop -
                         mTextView.paddingBottom) / mTextView.lineHeight
+                if (content.size > mLineNumber) {
+                    mTextView.text = Html.fromHtml(StringUtil.join(content.subList(0, mLineNumber), "<br/>"))
+                }
             }
         }
 
