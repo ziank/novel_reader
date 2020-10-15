@@ -16,7 +16,7 @@ class ReadView : android.support.v7.widget.AppCompatTextView {
     /**
      * 获取当前页总字数
      */
-    private val charNum: Int
+    val charNum: Int
         get() {
             val layout = layout ?: return 0
             return layout.getLineEnd(lineNum)
@@ -30,18 +30,18 @@ class ReadView : android.support.v7.widget.AppCompatTextView {
     /**
      * 获取当前页总行数
      */
-    private val lineNum: Int
+    val lineNum: Int
         get() {
             val layout = layout ?: return 0
             val topOfLastLine = height - paddingTop - paddingBottom - lineHeight
             return layout.getLineForVertical(topOfLastLine)
         }
 
-    constructor(context: Context) : super(context)
+    constructor(context: Context) : super(context) {}
 
-    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs)
+    constructor(context: Context, attrs: AttributeSet?) : super(context, attrs) {}
 
-    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr)
+    constructor(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : super(context, attrs, defStyleAttr) {}
 
     // 构造函数略...
 
@@ -54,7 +54,7 @@ class ReadView : android.support.v7.widget.AppCompatTextView {
      * 去除当前页无法显示的字
      * @return 去掉的字数
      */
-    private fun resize(): Int {
+    fun resize(): Int {
         val oldContent = text
         val newContent = oldContent.subSequence(0, charNum)
         text = newContent
@@ -63,6 +63,6 @@ class ReadView : android.support.v7.widget.AppCompatTextView {
 
     override fun getLineCount(): Int {
         val linenum = lineNum
-        return if (linenum == 0 && charCount == 0) 0 else linenum + 1
+        return if (text.isNullOrEmpty()) 0 else linenum + 1
     }
 }
