@@ -13,29 +13,23 @@ import android.provider.BaseColumns
 class DataBaseHelper(context: Context, dbName: String, factory:
 SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, dbName, factory, version) {
 
-    interface DatabaseSchema {
-        val createSql: String
-        val tableName: String
-    }
-
-    interface BookTable : DatabaseSchema, BaseColumns {
+    interface BookTable : BaseColumns {
         companion object {
-            val TABLE_NAME = "book"
+            const val TABLE_NAME = "book"
 
-            val BOOK_TITLE = "title"
-            val BOOK_AUTHOR = "author"
-            val BOOK_URL = "book_url"
-            val BOOK_UPDATE = "update_content"
-            val BOOK_COVER = "cover_url"
-            val BOOK_SUMMARY = "summary"
-            val BOOK_CODE = "book_id"
+            const val BOOK_TITLE = "title"
+            const val BOOK_AUTHOR = "author"
+            const val BOOK_URL = "book_url"
+            const val BOOK_UPDATE = "update_content"
+            const val BOOK_COVER = "cover_url"
+            const val BOOK_SUMMARY = "summary"
+            const val BOOK_CODE = "book_id"
 
-            val CHAPTER_INDEX = "chapter_index"
-            val READ_POS = "read_pos"
-            val HAS_UPDATE = "has_update"
-            val SORT_TIME = "sort_time"
-            val BOOK_SOURCE = "source"
-            val SORT_TIME_DEF = "sort_time LONG DEFAULT 0 NOT NULL"
+            const val CHAPTER_INDEX = "chapter_index"
+            const val READ_POS = "read_pos"
+            const val HAS_UPDATE = "has_update"
+            const val SORT_TIME = "sort_time"
+            const val SORT_TIME_DEF = "sort_time LONG DEFAULT 0 NOT NULL"
 
             val CREATE_TABLE_SQL = CREATE_TABLE +
                     TABLE_NAME +
@@ -46,7 +40,6 @@ SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, dbName,
                     BOOK_UPDATE + " TEXT, " +
                     BOOK_COVER + " VARCHAR(1024), " +
                     BOOK_SUMMARY + " TEXT" + ", " +
-                    BOOK_SOURCE + " TEXT" + ", " +
                     CHAPTER_INDEX + " INT DEFAULT 0 NOT NULL, " +
                     READ_POS + " INT DEFAULT 0 NOT NULL, " +
                     HAS_UPDATE + " BOOLEAN DEFAULT FALSE NOT NULL, " +
@@ -68,7 +61,7 @@ SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, dbName,
     }
 
     companion object {
-        internal val CREATE_TABLE = "create table if not exists "
-        internal val DROP_TABLE = "drop table if exists "
+        internal const val CREATE_TABLE = "create table if not exists "
+        internal const val DROP_TABLE = "drop table if exists "
     }
 }

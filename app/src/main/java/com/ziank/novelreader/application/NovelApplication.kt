@@ -69,9 +69,9 @@ class NovelApplication : Application() {
 
     companion object {
         lateinit var instance: NovelApplication
-        val kReadSize = "read_size"
-        val kReadBackgroundResource = "read_bg_resource"
-        val kReadSlideMode = "slide_mode"
-        val kFontType = "font_type"
+        const val kReadSize = "read_size"
+        const val kReadBackgroundResource = "read_bg_resource"
+        const val kReadSlideMode = "slide_mode"
+        const val kFontType = "font_type"
     }
 }

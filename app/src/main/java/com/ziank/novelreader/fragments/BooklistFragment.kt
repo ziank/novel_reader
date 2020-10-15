@@ -6,22 +6,15 @@ import android.app.LoaderManager
 import android.content.Context
 import android.content.Intent
 import android.content.Loader
-import android.databinding.DataBindingComponent
-import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
-import android.view.ContextMenu
-import android.view.LayoutInflater
-import android.view.MenuItem
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import android.widget.AdapterView
 import android.widget.BaseAdapter
 import android.widget.ListView
 import android.widget.Toast
-
-import com.baoyz.widget.PullRefreshLayout
-import com.kaopiz.kprogresshud.KProgressHUD
+import com.itheima.pulltorefreshlib.PullToRefreshBase
+import com.itheima.pulltorefreshlib.PullToRefreshListView
 import com.ziank.novelreader.R
 import com.ziank.novelreader.activities.BookMenuListActivity
 import com.ziank.novelreader.activities.BookPageActivity
@@ -35,11 +28,10 @@ import com.ziank.novelreader.manager.BookManager
 import com.ziank.novelreader.model.Book
 import com.ziank.novelreader.model.NovelEvent
 import com.ziank.novelreader.view_models.BookItemViewModule
-import com.ziank.novelreader.view_models.BookPageViewModel
 import com.ziank.novelreader.view_models.MyComponent
-
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
+import android.text.method.TextKeyListener.clear
 
 /**
  * A simple [Fragment] subclass.
@@ -47,8 +39,8 @@ import org.greenrobot.eventbus.ThreadMode
 class BooklistFragment : BaseFragment(), LoaderManager.LoaderCallbacks<List<Book>> {
 
     private lateinit var mRefreshLayout:
-            PullRefreshLayout
-    private lateinit var mBooklistView: ListView
+            PullToRefreshListView
+//    private lateinit var mBooklistView: ListView
     private lateinit var mEmptyView: View
     private lateinit var mGotoSuggestView: View
 
@@ -63,7 +55,6 @@ class BooklistFragment : BaseFragment(), LoaderManager.LoaderCallbacks<List<Book
         val view = inflater.inflate(R.layout.fragment_booklist, container,
                 false)
         mRefreshLayout = view.findViewById(R.id.refresher)
-        mBooklistView = view.findViewById(R.id.book_list)
         mEmptyView = view.findViewById(R.id.empty_view)
         mGotoSuggestView = view.findViewById(R.id.goto_suggest)
         return view
@@ -79,25 +70,29 @@ class BooklistFragment : BaseFragment(), LoaderManager.LoaderCallbacks<List<Book
 
     private fun initViews() {
         mAdapter = BooklistAdapter(activity)
-        mBooklistView.adapter = mAdapter
-
-        mBooklistView.onItemClickListener = AdapterView.OnItemClickListener { adapterView, view, i, l ->
-            val book = mBooklist!![i]
+        mRefreshLayout.mode = PullToRefreshBase.Mode.PULL_FROM_START
+        mRefreshLayout.setAdapter(mAdapter)
+        mRefreshLayout.setOnItemClickListener(AdapterView.OnItemClickListener { _, _, i, _ ->
+            val book = mBooklist!![i - 1]
             book.isHasUpdate = false
             DatabaseManager.sharedManager.updateBookStatus(book)
             val intent = Intent(activity,
                     ReadActivity::class.java)
             intent.putExtra(Constants.BOOK, book)
             startActivity(intent)
-        }
+        })
 
-        registerForContextMenu(mBooklistView)
+        registerForContextMenu(mRefreshLayout.refreshableView)
 
-        mRefreshLayout.setRefreshStyle(PullRefreshLayout.STYLE_WATER_DROP)
-        mRefreshLayout.setOnRefreshListener {
-                    mIsRefreshing = true
-                    BookManager.instance.refreshBooklist()
-                }
+        mRefreshLayout.setOnRefreshListener(object: PullToRefreshBase.OnRefreshListener2<ListView> {
+            override fun onPullUpToRefresh(p0: PullToRefreshBase<ListView>?) {
+            }
+
+            override fun onPullDownToRefresh(refreshView: PullToRefreshBase<ListView>) {
+                mIsRefreshing = true
+                BookManager.instance.refreshBooklist()
+            }
+        })
 
         mGotoSuggestView.setOnClickListener {
             val myAcitvity = activity as MainActivity
@@ -122,7 +117,7 @@ class BooklistFragment : BaseFragment(), LoaderManager.LoaderCallbacks<List<Book
 
     override fun onContextItemSelected(item: MenuItem): Boolean {
         val itemInfo = item.menuInfo as AdapterView.AdapterContextMenuInfo
-        val book = mAdapter!!.getItem(itemInfo.position)
+        val book = mAdapter!!.getItem(itemInfo.position - 1)
         when (item.itemId) {
             1 -> {
                 mBooklist!!.remove(book)
@@ -174,7 +169,7 @@ class BooklistFragment : BaseFragment(), LoaderManager.LoaderCallbacks<List<Book
         }
 
         mAdapter!!.notifyDataSetChanged()
-        mRefreshLayout.setRefreshing(false)
+        mRefreshLayout.onRefreshComplete()
     }
 
     override fun onLoaderReset(loader: Loader<List<Book>>) {
@@ -230,6 +225,6 @@ class BooklistFragment : BaseFragment(), LoaderManager.LoaderCallbacks<List<Book
     }
 
     companion object {
-        private val LOAD_FAVORITED_BOOK = 0
+        private const val LOAD_FAVORITED_BOOK = 0
     }
 }

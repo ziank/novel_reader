@@ -177,8 +177,8 @@ class BookMenuListActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Array
 
     companion object {
 
-        val FROM_CONTENT = 1
-        val FROM_BOOK_PAGE = FROM_CONTENT + 1
-        private val GET_CHAPTER_LIST = 0
+        const val FROM_CONTENT = 1
+        const val FROM_BOOK_PAGE = FROM_CONTENT + 1
+        private const val GET_CHAPTER_LIST = 0
     }
 }

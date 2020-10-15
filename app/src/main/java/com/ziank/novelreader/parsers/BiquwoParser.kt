@@ -1,34 +1,31 @@
 package com.ziank.novelreader.parsers
 
-import android.util.Log
 import com.ziank.novelreader.R
 import com.ziank.novelreader.model.Book
 import com.ziank.novelreader.model.Chapter
 import org.jsoup.Jsoup
 import java.net.MalformedURLException
 import java.net.URL
-import java.util.ArrayList
 
-class BiqulaParser: BaseParser() {
+class BiquwoParser: BaseParser() {
     override val resourceName: String
-        get() = "笔趣啦"
+        get() = "笔趣窝"
 
     override val hostIdentifier: String
-        get() = "qu.la"
+        get() = "biquwo."
 
     override val resourceColor: Int
-        get() = R.color.biqula_icon
+        get() = R.color.biquwo_icon
 
     override fun getSearchBookUrl(bookName: String): String {
-        return String.format("https://sou.xanbhx.com/search?siteid=qula&q=%s", bookName)
+        return String.format("https://biquwo.com/searchbook.php?keyword=%s", bookName)
     }
 
     override fun getDownloadBookUrl(book: Book): String = book.bookUrl
 
     override fun parseBookList(htmlContent: String): ArrayList<Book>? {
-        Log.e("----", htmlContent)
         val document = Jsoup.parse(htmlContent)
-        val novelListTag = document.getElementsByClass("search-list").first()
+        val novelListTag = document.getElementsByClass("novelslist2").first()
         if (novelListTag == null) {
             return null
         }
@@ -41,17 +38,17 @@ class BiqulaParser: BaseParser() {
         val books = ArrayList<Book>()
 
         for (element in bookTags) {
-            val spanList = element.getElementsByTag("span")
-            val titleTag = spanList[1]
+            val titleTag = element.getElementsByClass("s2").first()
             val title = getTagText(titleTag)
             var bookUrl = ""
             if (null != titleTag) {
                 bookUrl = titleTag.getElementsByTag("a").attr("href")
+                bookUrl = URL(URL("https://biquwo.com/"), bookUrl).toString()
             }
 
-            val updateTag = spanList[2]
+            val updateTag = element.getElementsByClass("s3").first()
             val updateContent = getTagText(updateTag)
-            val authorTag = spanList[3]
+            val authorTag = element.getElementsByClass("s4").first()
             val author = getTagText(authorTag)
 
             val book = Book(title, author, bookUrl, updateContent)
@@ -97,6 +94,7 @@ class BiqulaParser: BaseParser() {
                 chapterList.add(chapter)
             }
         }
+
         while (chapterList.size > 0) {
             val chapter = chapterList.first()
             if (chapterList.filter { el -> el.url == chapter.url }.size > 1) {

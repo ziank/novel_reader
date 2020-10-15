@@ -114,7 +114,7 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     }
 
     private fun getFragmentTag(index: Int): String {
-        return "main_tab_" + index
+        return "main_tab_$index"
     }
 
     private var lastPressBackTime: Long = 0
@@ -131,9 +131,9 @@ class MainActivity : BaseActivity(), View.OnClickListener {
     }
 
     companion object {
-        val TAB_BAR_ITEM_COUNT = 2
-        val BOOK_LIST_INDEX = 0
-        val SUGGEST_INDEX = 1
-        val SETTINGS_INDEX = 2
+        const val TAB_BAR_ITEM_COUNT = 2
+        const val BOOK_LIST_INDEX = 0
+        const val SUGGEST_INDEX = 1
+        const val SETTINGS_INDEX = 2
     }
 }

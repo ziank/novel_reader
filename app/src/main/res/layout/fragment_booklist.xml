@@ -39,15 +39,16 @@
 
     </RelativeLayout>
 
-    <com.baoyz.widget.PullRefreshLayout
+    <com.itheima.pulltorefreshlib.PullToRefreshListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:longClickable="true"
         android:id="@+id/refresher">
-        <ListView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/book_list">
-        </ListView>
-    </com.baoyz.widget.PullRefreshLayout>
+        <!--<ListView-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent"-->
+            <!--android:id="@+id/book_list">-->
+        <!--</ListView>-->
+    </com.itheima.pulltorefreshlib.PullToRefreshListView>
 
 </FrameLayout>

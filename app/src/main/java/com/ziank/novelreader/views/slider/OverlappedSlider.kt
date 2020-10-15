@@ -1,12 +1,10 @@
 package com.ziank.novelreader.views.slider
 
-import android.os.Handler
 import android.view.MotionEvent
 import android.view.VelocityTracker
 import android.view.View
 import android.view.ViewConfiguration
 import android.widget.Scroller
-import kotlin.system.exitProcess
 
 /**
 * Created by ziank on 2017/9/27.
@@ -92,13 +90,13 @@ class OverlappedSlider : BaseSlider() {
                     }
                 }
 
-                if (mMode == BaseSlider.Companion.MODE_NONE && (mDirection ==
-                        BaseSlider.Companion.MOVE_TO_LEFT && adapter.hasNext() || mDirection == BaseSlider.Companion.MOVE_TO_RIGHT && adapter.hasPrevious())) {
-                    mMode = BaseSlider.Companion.MODE_MOVE
+                if (mMode == BaseSlider.MODE_NONE && (mDirection ==
+                        BaseSlider.MOVE_TO_LEFT && adapter.hasNext() || mDirection == BaseSlider.MOVE_TO_RIGHT && adapter.hasPrevious())) {
+                    mMode = BaseSlider.MODE_MOVE
                 }
-                if (mMode == BaseSlider.Companion.MODE_MOVE) {
+                if (mMode == BaseSlider.MODE_MOVE) {
                     if (mDirection == BaseSlider.Companion.MOVE_TO_LEFT && distance <= 0 || mDirection == BaseSlider.Companion.MOVE_TO_RIGHT && distance >= 0) {
-                        mMode = BaseSlider.Companion.MODE_NONE
+                        mMode = BaseSlider.MODE_NONE
                     }
                 }
                 if (mDirection != BaseSlider.Companion.MOVE_NO_RESULT) {

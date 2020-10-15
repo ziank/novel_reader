@@ -19,7 +19,7 @@ import org.greenrobot.eventbus.ThreadMode
 open class BaseFragment : Fragment() {
 
     private var mProgressHUD: KProgressHUD? = null
-    val mNovel = NovelApplication.instance
+    public val mNovel = NovelApplication.instance
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
