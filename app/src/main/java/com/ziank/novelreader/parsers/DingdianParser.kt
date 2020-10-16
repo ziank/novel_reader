@@ -19,7 +19,7 @@ import java.util.ArrayList
  * @copyright ziank.2018
  */
 
-class DingdianParser() : BaseParser() {
+class DingdianParser : BaseParser() {
 
     override val name: String
         get() = "顶点"

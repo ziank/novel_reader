@@ -62,7 +62,7 @@ class BookPageActivity : BaseActivity(), View.OnClickListener {
 
     private fun favoriteBook() {
         BookManager.instance.addBook(mBook)
-        mBookModel!!.notifyPropertyChanged(BR.favorited)
+        mBookModel!!.notifyPropertyChanged(BR.liked)
     }
 
     private fun readBook() {

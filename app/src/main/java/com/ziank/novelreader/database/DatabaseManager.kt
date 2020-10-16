@@ -41,6 +41,7 @@ class DatabaseManager {
                 System.currentTimeMillis())
         contentValues.put(DataBaseHelper.BookTable.BOOK_SOURCE,
                 book.bookSourceName)
+        contentValues.put(DataBaseHelper.BookTable.CHAPTER_COUNT, book.chapterCount)
         try {
             mDbHelper.writableDatabase.replaceOrThrow(DataBaseHelper
                     .BookTable.TABLE_NAME, null, contentValues)
@@ -81,6 +82,7 @@ class DatabaseManager {
                 book.updateContent)
         contentValues.put(DataBaseHelper.BookTable.SORT_TIME,
                 System.currentTimeMillis())
+        contentValues.put(DataBaseHelper.BookTable.CHAPTER_COUNT, book.chapterCount)
         mDbHelper.writableDatabase.update(DataBaseHelper.BookTable
                 .TABLE_NAME, contentValues, DataBaseHelper.BookTable
                 .BOOK_CODE + " = ?", arrayOf(book.bookCode))
@@ -104,6 +106,6 @@ class DatabaseManager {
 
     companion object {
         var sharedManager = DatabaseManager()
-        val DATABASE_VERSION = 2
+        val DATABASE_VERSION = 4
     }
 }

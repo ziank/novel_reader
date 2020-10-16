@@ -4,8 +4,6 @@ import android.databinding.BaseObservable
 import android.databinding.Bindable
 import com.ziank.novelreader.R
 import com.ziank.novelreader.application.NovelApplication
-import com.ziank.novelreader.views.slider.FontType
-import com.ziank.novelreader.views.slider.SlideMode
 
 /**
 * Created by ziank on 2017/11/3.

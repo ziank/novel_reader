@@ -164,8 +164,8 @@
             android:layout_height="wrap_content"
             android:layout_marginBottom="15dp"
             android:layout_marginEnd="15dp"
-            android:text="@{book.favorited ? @string/already_in_booklist : @string/add_to_booklist}"
-            android:enabled="@{!book.favorited}"
+            android:text="@{book.liked ? @string/already_in_booklist : @string/add_to_booklist}"
+            android:enabled="@{!book.liked}"
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintRight_toRightOf="parent"/>

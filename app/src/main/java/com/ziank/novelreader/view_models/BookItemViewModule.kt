@@ -31,4 +31,10 @@ class BookItemViewModule(private var mBook: Book) : BaseObservable() {
 
     val bookSourceName:String
         get() = mBook.bookSourceName
+
+    val bookUnreadCount: String
+        get() {
+            val unreadCount = mBook.chapterCount - mBook.chapterIndex - 1
+            return if (unreadCount <= 0) "" else unreadCount.toString() + "章未读"
+        }
 }

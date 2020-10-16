@@ -10,11 +10,11 @@ import java.util.ArrayList
 
 class BiqugeInfoParser : BaseParser() {
     override val name: String
-        get() = "笔趣阁2"
+        get() = "笔趣阁"
 
     override fun getSearchBookUrl(bookName: String): String {
         val bookName = URLEncoder.encode(bookName, "UTF8")
-        return String.format("http://www.biquge.info/modules/article/search.php?searchkey=%s", bookName)
+        return String.format("https://www.biquge.info/modules/article/search.php?searchkey=%s", bookName)
     }
 
     override fun getDownloadBookUrl(book: Book): String = book.bookUrl
@@ -23,6 +23,12 @@ class BiqugeInfoParser : BaseParser() {
         val document = Jsoup.parse(htmlContent)
 
         val bookList = ArrayList<Book>()
+        var baseUrl: URL? = null
+        try {
+            baseUrl = URL(getSearchBookUrl(""))
+        } catch (e: MalformedURLException) {
+            e.printStackTrace()
+        }
 
         val infoTag = document.getElementsByTag("tbody").first()
         if (infoTag != null) {
@@ -31,8 +37,8 @@ class BiqugeInfoParser : BaseParser() {
             var author: String = ""
             var bookUrl: String = ""
             var updateContent: String = ""
-            var summary: String = ""
-            var coverUrl: String = ""
+            val summary: String = ""
+            val coverUrl: String = ""
             if (tagList.size <= 1) {
                 return null
             }
@@ -49,6 +55,7 @@ class BiqugeInfoParser : BaseParser() {
                         2 -> author = getTagText(span)
                     }
                 }
+                bookUrl = URL(baseUrl, bookUrl).toString()
                 val book = Book(title, author, bookUrl, updateContent)
                 book.summary = summary
                 book.bookCoverUrl = coverUrl

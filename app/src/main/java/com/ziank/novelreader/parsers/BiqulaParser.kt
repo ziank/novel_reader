@@ -10,14 +10,8 @@ import java.net.URL
 import java.util.ArrayList
 
 class BiqulaParser: BaseParser() {
-    override val resourceName: String
+    override val name: String
         get() = "笔趣啦"
-
-    override val hostIdentifier: String
-        get() = "qu.la"
-
-    override val resourceColor: Int
-        get() = R.color.biqula_icon
 
     override fun getSearchBookUrl(bookName: String): String {
         return String.format("https://sou.xanbhx.com/search?siteid=qula&q=%s", bookName)
@@ -55,6 +49,9 @@ class BiqulaParser: BaseParser() {
             val author = getTagText(authorTag)
 
             val book = Book(title, author, bookUrl, updateContent)
+            book.bookSourceName = name
+            book.summary = ""
+            book.bookCoverUrl = ""
             books.add(book)
         }
         return books
@@ -62,8 +59,8 @@ class BiqulaParser: BaseParser() {
 
     override fun parseChapterList(book: Book, htmlContent: String): ArrayList<Chapter> {
         val document = Jsoup.parse(htmlContent)
-        val chapterListTag = document.getElementById("list")
-        val chapterTagList = chapterListTag.select("dd")
+        val chapterListTag = document.getElementsByClass("section-box").last()
+        val chapterTagList = chapterListTag.select("li")
 
         val count = chapterTagList.size
         val chapterList = ArrayList<Chapter>()

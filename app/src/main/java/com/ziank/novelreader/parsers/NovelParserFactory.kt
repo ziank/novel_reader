@@ -14,10 +14,11 @@ class NovelParserFactory private constructor() {
 
     init {
         mParserList = ArrayList()
-        mParserList.add(BiqulaParser())
+//        mParserList.add(BiqulaParser())
         mParserList.add(DingdianParser())
-        mParserList.add(Biquge11Parser())
+//        mParserList.add(Biquge11Parser())
         mParserList.add(BiqugeInfoParser())
+        mParserList.add(BiquwoParser())
     }
 
     fun getParser(book: Book): NovelParser? {

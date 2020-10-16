@@ -30,6 +30,7 @@ class Book : Serializable {
     var summary: String? = null
 
     var chapterIndex: Int = 0
+    var chapterCount: Int = 0
     var charIndex: Int = 0
     var isHasUpdate: Boolean = false
 
@@ -83,8 +84,9 @@ class Book : Serializable {
             book.isHasUpdate = helper.getBoolean(DataBaseHelper.BookTable
                     .HAS_UPDATE)
             book.bookSourceName = helper.getString(DataBaseHelper.BookTable.BOOK_SOURCE)
-                    book.bookUrl = book.bookUrl//.replace("qududu.org", "qududu.net")
+            book.bookUrl = book.bookUrl//.replace("qududu.org", "qududu.net")
             book.bookCoverUrl = book.bookCoverUrl//.replace("qududu.org","qududu.net")
+            book.chapterCount = helper.getInt(DataBaseHelper.BookTable.CHAPTER_COUNT)
             return book
         }
     }

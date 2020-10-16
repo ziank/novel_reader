@@ -24,12 +24,15 @@ SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, dbName,
             const val BOOK_COVER = "cover_url"
             const val BOOK_SUMMARY = "summary"
             const val BOOK_CODE = "book_id"
+            const val BOOK_SOURCE = "source"
 
             const val CHAPTER_INDEX = "chapter_index"
+            const val CHAPTER_COUNT = "chapter_count"
             const val READ_POS = "read_pos"
             const val HAS_UPDATE = "has_update"
             const val SORT_TIME = "sort_time"
             const val SORT_TIME_DEF = "sort_time LONG DEFAULT 0 NOT NULL"
+            const val CHAPTER_COUNT_DEF = "chapter_count INT DEFAULT 0 NOT NULL"
 
             val CREATE_TABLE_SQL = CREATE_TABLE +
                     TABLE_NAME +
@@ -40,7 +43,9 @@ SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, dbName,
                     BOOK_UPDATE + " TEXT, " +
                     BOOK_COVER + " VARCHAR(1024), " +
                     BOOK_SUMMARY + " TEXT" + ", " +
+                    BOOK_SOURCE + " VARCHAR(128), " +
                     CHAPTER_INDEX + " INT DEFAULT 0 NOT NULL, " +
+                    CHAPTER_COUNT + " INT DEFAULT 0 NOT NULL, " +
                     READ_POS + " INT DEFAULT 0 NOT NULL, " +
                     HAS_UPDATE + " BOOLEAN DEFAULT FALSE NOT NULL, " +
                     SORT_TIME + " LONG DEFAULT 0 NOT NULL);"
@@ -54,10 +59,14 @@ SQLiteDatabase.CursorFactory?, version: Int) : SQLiteOpenHelper(context, dbName,
 
     override fun onUpgrade(sqLiteDatabase: SQLiteDatabase, oldVersion: Int,
                            newVersion: Int) {
-//        if (oldVersion < 2) {
-//            sqLiteDatabase.execSQL("ALTER TABLE " + BookTable.TABLE_NAME +
-//                    " ADD " + BookTable.SORT_TIME_DEF)
-//        }
+        if (oldVersion < 2) {
+            sqLiteDatabase.execSQL("ALTER TABLE " + BookTable.TABLE_NAME +
+                    " ADD " + BookTable.SORT_TIME_DEF)
+        }
+        if (oldVersion < 4) {
+            sqLiteDatabase.execSQL("ALTER TABLE " + BookTable.TABLE_NAME +
+                    " ADD " + BookTable.CHAPTER_COUNT_DEF)
+        }
     }
 
     companion object {

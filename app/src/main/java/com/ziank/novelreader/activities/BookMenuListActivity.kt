@@ -70,10 +70,7 @@ class BookMenuListActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Array
             }
         }
         mMenuListView.onItemLongClickListener = AdapterView.OnItemLongClickListener { _, _, pos, _ ->
-            val chapterList = mChapterList
-            if (chapterList == null) {
-                return@OnItemLongClickListener false
-            }
+            val chapterList = mChapterList ?: return@OnItemLongClickListener false
             if (chapterList.size <= pos) {
                 return@OnItemLongClickListener true
             } else {
@@ -119,6 +116,7 @@ class BookMenuListActivity : BaseActivity(), LoaderManager.LoaderCallbacks<Array
     override fun onLoadFinished(loader: Loader<ArrayList<Chapter>>,
                                 chapters: ArrayList<Chapter>?) {
         mChapterList = chapters
+        mBook.chapterCount = chapters?.size ?: 0
         mAdapter!!.notifyDataSetChanged()
         if (null != chapters && chapters.size > 0) {
             hideProgressHud()

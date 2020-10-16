@@ -141,6 +141,7 @@ class ReadActivity : BaseActivity() {
                     override fun onLoadFinished(loader: Loader<ArrayList<Chapter>>,
                                                 chapters: ArrayList<Chapter>?) {
                         mChapters = chapters
+                        mBook.chapterCount = chapters?.size ?: 0
                         reloadData()
                     }
 

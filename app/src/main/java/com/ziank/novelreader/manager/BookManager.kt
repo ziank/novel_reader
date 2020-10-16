@@ -380,6 +380,7 @@ class BookManager private constructor() {
                                     .updateContent, ignoreCase = true)) {
                                 book.isHasUpdate = true
                                 book.updateContent = chapter.title
+                                book.chapterCount = chapterList.size
                                 DatabaseManager.sharedManager
                                         .updateBookStatus(book)
                             }
@@ -461,8 +462,7 @@ class BookManager private constructor() {
     fun getDistanceBetweenString(s1: String, s2: String) :Int {
         val nLenA = s1.length
         val nLenB = s2.length
-        val matrix:Array<Array<Int>> = Array<Array<Int>>(nLenA + 1,
-                { Array<Int>(nLenB + 1, { 0 }) })
+        val matrix:Array<Array<Int>> = Array<Array<Int>>(nLenA + 1) { Array<Int>(nLenB + 1) { 0 } }
 
         matrix[0][0] = 0
 

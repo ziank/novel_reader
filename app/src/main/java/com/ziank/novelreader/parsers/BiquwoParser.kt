@@ -8,17 +8,11 @@ import java.net.MalformedURLException
 import java.net.URL
 
 class BiquwoParser: BaseParser() {
-    override val resourceName: String
+    override val name: String
         get() = "笔趣窝"
 
-    override val hostIdentifier: String
-        get() = "biquwo."
-
-    override val resourceColor: Int
-        get() = R.color.biquwo_icon
-
     override fun getSearchBookUrl(bookName: String): String {
-        return String.format("https://biquwo.com/searchbook.php?keyword=%s", bookName)
+        return String.format("https://www.biquwo.com/searchbook.php?keyword=%s", bookName)
     }
 
     override fun getDownloadBookUrl(book: Book): String = book.bookUrl
@@ -52,6 +46,9 @@ class BiquwoParser: BaseParser() {
             val author = getTagText(authorTag)
 
             val book = Book(title, author, bookUrl, updateContent)
+            book.bookSourceName = name
+            book.summary = ""
+            book.bookCoverUrl = ""
             books.add(book)
         }
         return books
